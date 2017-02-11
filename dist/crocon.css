@@ -1,0 +1,55 @@
+#crocon {
+  color: black;
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  font-weight: normal;
+  font-style: normal; }
+  #crocon.badge {
+    color: white;
+    background-color: black;
+    border-radius: 3px;
+    padding: 2px;
+    margin: 0 2px; }
+    #crocon.badge.blue {
+      color: white;
+      background-color: #61afef; }
+    #crocon.badge.orange {
+      color: white;
+      background-color: #d19a66; }
+    #crocon.badge.red {
+      color: white;
+      background-color: #e06c75; }
+    #crocon.badge.green {
+      color: white;
+      background-color: #98c379; }
+    #crocon.badge.cyan {
+      color: white;
+      background-color: #56b6c2; }
+    #crocon.badge.purple {
+      color: white;
+      background-color: #c678dd; }
+    #crocon.badge.focus {
+      color: #bada55;
+      background: #444; }
+  #crocon.blue {
+    color: #4078f2; }
+  #crocon.orange {
+    color: #986801; }
+  #crocon.red {
+    color: #e45649; }
+  #crocon.green {
+    color: #50a14f; }
+  #crocon.cyan {
+    color: #0184bc; }
+  #crocon.purple {
+    color: #a626a4; }
+  #crocon.bold {
+    font-weight: bold; }
+  #crocon.italic {
+    font-style: italic; }
+  #crocon.strikethrough {
+    text-decoration: line-through; }
+  #crocon.underline {
+    text-decoration: underline; }

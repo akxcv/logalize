@@ -1,0 +1,47 @@
+{
+  "name": "crocon",
+  "version": "0.1.0",
+  "description": "Makes developer console great again",
+  "keywords": [
+    "browser",
+    "colors",
+    "console",
+    "debug",
+    "devtools",
+    "developer",
+    "wrapper"
+  ],
+  "main": "src/index.js",
+  "scripts": {
+    "compile": "browserify -g uglifyify app.js > dist/crocon.js && node-sass index.scss dist/crocon.css",
+    "lint": "eslint src/*.js test/*.js; exit 0",
+    "test": "jest --coverage"
+  },
+  "author": "Alexander Komarov <ak@akxcv.com> (http://akxcv.com)",
+  "license": "MIT",
+  "repository": "akxcv/crocon",
+  "dependencies": {},
+  "devDependencies": {
+    "browserify": "^14.0.0",
+    "eslint": "^3.15.0",
+    "eslint-config-logux": "^4.0.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-es5": "^1.0.1",
+    "eslint-plugin-promise": "^3.4.1",
+    "eslint-plugin-standard": "^2.0.1",
+    "jest": "^18.1.0",
+    "node-sass": "^4.5.0",
+    "uglifyify": "^3.0.4",
+    "uglifyjs": "^2.4.10"
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-standard",
+    "rules": {
+      "no-multi-spaces": 0
+    },
+    "env": {
+      "browser": true,
+      "jest": true
+    }
+  }
+}
