@@ -105,19 +105,19 @@ Methods that work exactly like their console's counterparts:
 - [`assert`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#assert)
 - [`count`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#count)
 - [`debug`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#consoledebugobject_object)
-*[also supports [formatting](#formatting)*
+[also supports formatting](#formatting)
 - [`dir`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#dir)
 - [`dirxml`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#consoledirxmlobject)
 - [`error`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#error)
-*[also supports formatting](#formatting), see [known issues](#known-issues)*
-- [`info`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#consoleinfoobject_object) *[also supports formatting](#formatting)*
+[also supports formatting](#formatting), see [known issues](#known-issues)
+- [`info`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#consoleinfoobject_object) [also supports formatting](#formatting)
 - [`log`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#log)
-*[also supports formatting](#formatting)*
+[also supports formatting](#formatting)
 - [`timeStamp`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#timestamp)
 - [`trace`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#trace)
-*see [known issues](#known-issues)*
+see [known issues](#known-issues)
 - [`warn`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#warn)
-*[also supports formatting](#formatting)*
+[also supports formatting](#formatting)
 
 Also:
 
