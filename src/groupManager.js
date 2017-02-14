@@ -4,13 +4,10 @@ var GroupManager = {
   currentStack: [],
   previousStack: [],
   globalStack: [],
-  bindEvents: function () {
-    var self = this
-    window.addEventListener('blur', function () {
-      self.clear()
-    })
+  bindEvents () {
+    window.addEventListener('blur', () => this.clear())
   },
-  group: function (groupMethod, args, lambdaMode) {
+  group (groupMethod, args, lambdaMode) {
     if (lambdaMode) {
       this.ungroup(false)
       this.globalStack.push(args)
@@ -20,46 +17,37 @@ var GroupManager = {
 
     if (!document.hasFocus()) return
 
-    var i
     if (lambdaMode) {
-      for (i in args) BrowserAdapter[groupMethod](args[i])
+      for (let arg of args) BrowserAdapter[groupMethod](arg)
     } else {
       var commonGroupCount = 0
 
-      for (i in this.currentStack) {
+      for (let i in this.currentStack) {
         if (this.previousStack[i] === this.currentStack[i]) {
           commonGroupCount += 1
         }
       }
       var groupsToDeleteCount = this.previousStack.length - commonGroupCount
 
-      for (i = 0; i < groupsToDeleteCount; i++) BrowserAdapter.groupEnd()
+      for (let i = 0; i < groupsToDeleteCount; i++) BrowserAdapter.groupEnd()
       var groupsToAdd = this.currentStack.slice(commonGroupCount)
-      for (i in groupsToAdd) BrowserAdapter[groupMethod](groupsToAdd[i])
+      for (let group of groupsToAdd) BrowserAdapter[groupMethod](group)
     }
   },
-  ungroup: function (lambdaMode) {
+  ungroup (lambdaMode) {
     if (this.previousStack.length && !this.currentStack.length) {
-      this.previousStack.forEach(function () {
-        BrowserAdapter.groupEnd()
-      })
+      this.previousStack.forEach(() => BrowserAdapter.groupEnd())
     }
     if (lambdaMode) {
       var groups = this.globalStack.pop()
-      groups.forEach(function () {
-        BrowserAdapter.groupEnd()
-      })
+      groups.forEach(() => BrowserAdapter.groupEnd())
     }
     this.previousStack = this.currentStack
     this.currentStack = []
   },
-  clear: function () {
-    this.previousStack.forEach(function () {
-      BrowserAdapter.groupEnd()
-    })
-    this.currentStack.forEach(function () {
-      BrowserAdapter.groupEnd()
-    })
+  clear () {
+    this.previousStack.forEach(() => BrowserAdapter.groupEnd())
+    this.currentStack.forEach(() => BrowserAdapter.groupEnd())
     this.previousStack = []
   }
 }

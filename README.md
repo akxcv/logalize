@@ -143,7 +143,7 @@ logalize = new Logalize({
   enabled: true,
   enableFormatting: true,
   collapseGroups: false,
-  modifyConsole: true
+  setupConsoleHooks: true
 })
 ```
 - `enabledByDefault`: Defines whether to enable or disable Logalize.
@@ -151,7 +151,7 @@ When Logalize is disabled, it will not produce any output. However, lambda versi
 - `enableFormatting`: Defines whether [formatting](#formatting) should be enabled. Default: `true`.
 - `collapseGroups`: Defines whether [groups](#grouping) should be
 collapsed or not. Default: `false` (expanded).
-- `modifyConsole`: Defines whether Logalize needs to modify `console` upon initialization.
+- `setupConsoleHooks`: Defines whether Logalize needs to modify `console` upon initialization.
 Generally, modifying global objects is a bad thing to do, but this is required if you want Logalize to
 handle console output correctly. Logalize is modifying `console` functions *very carefully* (it just
 needs to hook to those methods). You can safely disable this options, but regular console output
@@ -229,7 +229,7 @@ At the moment, only these attributes are supported: `margin`, `color`, `backgrou
 
 - **There's no way to detect when console output happens**. Development tools are separate from `window` and `document`,
 and there is no way to know if the output is happening. We can detect things like `console.log`
-by modifying those functions (hence the `modifyConsole` init parameter), but we cannot know when,
+by modifying those functions (hence the `setupConsoleHooks` init parameter), but we cannot know when,
 say, an error thrown with `throw` is going to appear in console. Groups are implemented in such a way that they don't get closed
 until it's necessary, so that leads to console output being stuck inside groups it doesn't belong to.
 Part of the problem is solved by modifying `console`, but another part is not solvable without a browser extension.

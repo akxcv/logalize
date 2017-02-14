@@ -1,15 +1,15 @@
 var Formatter = {
-  format: function (args) {
+  format (args) {
     var formattedStrings = []
     var styles = []
     var formattedArgCount = 0
     var result
 
-    for (var i in args) {
-      var arg = this.formatObject(args[i])
+    for (let arg of args) {
+      arg = this.formatObject(arg)
       if (typeof arg === 'undefined' || !arg[1].length) break
       formattedStrings.push(arg[0])
-      styles.push.apply(styles, arg[1])
+      styles.push(...arg[1])
       formattedArgCount += 1
     }
 
@@ -17,30 +17,30 @@ var Formatter = {
     result = []
     if (formattedStrings.length) {
       result.push(formattedStrings.join(' '))
-      result.push.apply(result, styles)
+      result.push(...styles)
     }
-    result.push.apply(result, args)
+    result.push(...args)
     return result
   },
 
-  formatObject: function (obj) {
+  formatObject (obj) {
     if (typeof obj !== 'string') return
     return this.formatString(obj)
   },
 
-  formatString: function (string) {
+  formatString (string) {
     var styles = []
     var classes
 
     while (this.canFormat(string)) {
-      var match = this.getRelevantMatch(string)
+      let match = this.getRelevantMatch(string)
       if (typeof match.format.classes === 'string') {
         classes = match.format.classes
       } else {
         classes = match.format.classes(match.match)
       }
 
-      string = string.replace(match.format.regex, function (_, m) { return '%c' + m + '%c' })
+      string = string.replace(match.format.regex, (_, m) => `%c${m}%c`)
       styles.push(this.computeStyle(classes))
       styles.push(this.computeStyle('default'))
     }
@@ -48,27 +48,24 @@ var Formatter = {
     return [string, styles]
   },
 
-  canFormat: function (string) {
-    for (var i in this.formats) {
-      if (this.formats[i].regex.test(string)) return true
+  canFormat (string) {
+    for (let format of this.formats) {
+      if (format.regex.test(string)) return true
     }
     return false
   },
 
-  getRelevantMatch: function (string) {
+  getRelevantMatch (string) {
     var matches = []
-    for (var i in this.formats) {
-      var format = this.formats[i]
+    for (let format of this.formats) {
       if (format.regex.test(string)) {
-        matches.push({ match: string.match(format.regex), format: format })
+        matches.push({ match: string.match(format.regex), format })
       }
     }
-    return matches.sort(function (a, b) {
-      return a.match.index - b.match.index
-    })[0]
+    return matches.sort((a, b) => a.match.index - b.match.index)[0]
   },
 
-  computeStyle: function (classes) {
+  computeStyle (classes) {
     // Create a temporary div to compute styles
     var div = document.createElement('div')
     div.id = 'logalize'
@@ -80,9 +77,8 @@ var Formatter = {
     var computedStyle = getComputedStyle(div)
     var styles = []
 
-    for (var i in this.supportedStyles) {
-      var s = this.supportedStyles[i]
-      styles.push(s + ':' + computedStyle.getPropertyValue(s))
+    for (let s of this.supportedStyles) {
+      styles.push(`${s}:${computedStyle.getPropertyValue(s)}`)
     }
 
     return styles.join(';')
@@ -112,7 +108,7 @@ var Formatter = {
       // custom
       // [my text].class1.class2
       regex: /\[([^\[\]]+)\](\.[\.\w]+)/,
-      classes: function (match) { return match[2].split('.').join(' ') }
+      classes: (match) => match[2].split('.').join(' ')
     }
   ]
 }

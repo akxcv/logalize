@@ -2,6 +2,7 @@
 var loadTestFragment = require('./support/loadTestFragment')
 var Logalize
 var logalize
+global.localStorage = {}
 
 beforeAll(function () {
   document.hasFocus = function () { return true }
@@ -12,7 +13,7 @@ beforeAll(function () {
 
 beforeEach(function () {
   console._clearArrays()
-  localStorage = {
+  global.localStorage = {
     setItem: function (key, value) { this[key] = value },
     getItem: function (key) { return this[key] }
   }

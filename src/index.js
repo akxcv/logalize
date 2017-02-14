@@ -2,30 +2,27 @@ var GroupManager = require('./groupManager')
 var BrowserAdapter = require('./browserAdapter')
 var Formatter = require('./formatter')
 
-function Logalize (opts) {
-  var defaultOpts = {
-    enabled: true,
-    enableFormatting: true,
-    collapseGroups: false,
-    modifyConsole: true
-  }
+function Logalize ({
+  enabled = true,
+  enableFormatting = true,
+  collapseGroups = false,
+  setupConsoleHooks = true
+} = {}) {
 
-  if (!opts) opts = {}
-  for (var key in defaultOpts) {
-    if (!opts.hasOwnProperty(key)) opts[key] = defaultOpts[key]
-  }
-
-  this.enabled = opts.enabled
-  this.enableFormatting = opts.enableFormatting
-  this.collapseGroups = opts.collapseGroups
-  this.formattableMethods = ['log', 'info', 'debug', 'warn', 'error', 'focus']
+  Object.assign(this, {
+    enabled,
+    enableFormatting,
+    collapseGroups,
+    setupConsoleHooks,
+    formattableMethods: ['log', 'info', 'debug', 'warn', 'error', 'focus']
+  })
 
   GroupManager.bindEvents()
 
-  if (opts.modifyConsole) {
-    var performConsoleAction = function (action, args) {
+  if (this.setupConsoleHooks) {
+    let performConsoleAction = function (action, args) {
       GroupManager.clear()
-      return BrowserAdapter[action].apply(BrowserAdapter, args)
+      return BrowserAdapter[action](...args)
     }
 
     console.log = function () {
@@ -89,80 +86,77 @@ function Logalize (opts) {
 }
 
 Logalize.prototype = {
-  log: function () {
-    this.print('log', [].slice.call(arguments))
+  log () {
+    this.print('log', ...arguments)
   },
-  debug: function () {
-    this.print('debug', [].slice.call(arguments))
+  debug () {
+    this.print('debug', ...arguments)
   },
-  info: function () {
-    this.print('info', [].slice.call(arguments))
+  info () {
+    this.print('info', ...arguments)
   },
-  warn: function () {
-    this.print('warn', [].slice.call(arguments))
+  warn () {
+    this.print('warn', ...arguments)
   },
-  error: function () {
-    this.print('error', [].slice.call(arguments))
+  error () {
+    this.print('error', ...arguments)
   },
 
-  assert: function () {
-    this.print('assert', [].slice.call(arguments))
+  assert () {
+    this.print('assert', ...arguments)
   },
-  count: function (label) {
-    this.print('count', [label])
+  count (label) {
+    this.print('count', label)
   },
-  dir: function (obj) {
-    this.print('dir', [obj])
+  dir (obj) {
+    this.print('dir', obj)
   },
-  dirxml: function (obj) {
-    this.print('dirxml', [obj])
+  dirxml (obj) {
+    this.print('dirxml', obj)
   },
-  profile: function () {
-    var args = [].slice.call(arguments)
+  profile (...args) {
     var func = args.pop()
     if (typeof func === 'function') {
       if (this._isEnabled()) BrowserAdapter.profile(args[0])
-      var returnValue = func.call()
+      var returnValue = func()
       this.profileEnd()
       return returnValue
     } else {
       if (this._isEnabled()) BrowserAdapter.profile(args[0])
     }
   },
-  profileEnd: function () {
+  profileEnd () {
     if (this._isEnabled()) BrowserAdapter.profileEnd()
   },
-  time: function () {
-    var args = [].slice.call(arguments)
+  time (...args) {
     var func = args.pop()
     if (typeof func === 'function') {
       if (this._isEnabled()) BrowserAdapter.time(args[0])
-      var returnValue = func.call()
+      var returnValue = func()
       this.timeEnd(args[0])
       return returnValue
     } else {
       if (this._isEnabled()) BrowserAdapter.time(args[0])
     }
   },
-  timeEnd: function (label) {
+  timeEnd (label) {
     if (this._isEnabled()) BrowserAdapter.timeEnd(label)
   },
-  timeStamp: function (label) {
+  timeStamp (label) {
     if (this._isEnabled()) BrowserAdapter.timeStamp(label)
   },
-  trace: function (obj) {
-    this.print('trace', [obj])
+  trace (obj) {
+    this.print('trace', obj)
   },
 
-  group: function () {
-    var args = [].slice.call(arguments)
+  group (...args) {
     var groupMethod = this.collapseGroups ? 'groupCollapsed' : 'group'
 
     if (typeof args[args.length - 1] === 'function') {
       var func = args.pop()
 
       if (this._isEnabled()) GroupManager.group(groupMethod, args, true)
-      var returnValue = func.call()
+      var returnValue = func()
       if (this._isEnabled()) GroupManager.ungroup(true)
 
       return returnValue
@@ -172,7 +166,7 @@ Logalize.prototype = {
     return this
   },
 
-  print: function (method, args) {
+  print (method, ...args) {
     GroupManager.ungroup()
     if (!this._isEnabled()) return
 
@@ -180,11 +174,12 @@ Logalize.prototype = {
     if (shouldGroupInline) {
       var groupArgs = []
       var stack = GroupManager.previousStack
-      stack.unshift.apply(stack, GroupManager.globalStack.reduce(function (a, b) { return a.concat(b) }, []))
+      stack.unshift(...GroupManager.globalStack.reduce((a, b) => a.concat(b), []))
       GroupManager.previousStack = []
-      for (var i in stack) {
+      for (let i in stack) {
         groupArgs.push(stack[i])
       }
+      // TODO improve this formatting
       var groupString = groupArgs.join(' -> ') + ' :: '
 
       if (typeof args[0] === 'string') {
@@ -199,25 +194,25 @@ Logalize.prototype = {
     }
 
     if (shouldGroupInline) {
-      BrowserAdapter.groupCollapsed.apply(BrowserAdapter, args)
+      BrowserAdapter.groupCollapsed(...args)
       BrowserAdapter.groupEnd()
     } else {
-      BrowserAdapter[method].apply(BrowserAdapter, args)
+      BrowserAdapter[method](...args)
     }
   },
 
   // Enable / disable
 
-  enable: function () {
+  enable () {
     if (localStorage) localStorage.setItem('logalizeEnabled', 'true')
   },
-  disable: function () {
+  disable () {
     if (localStorage) localStorage.setItem('logalizeEnabled', 'false')
   },
 
   // Private
 
-  _isEnabled: function () {
+  _isEnabled () {
     if (localStorage && localStorage.logalizeEnabled) {
       return localStorage.logalizeEnabled !== 'false'
     } else {
