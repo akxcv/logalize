@@ -1,13 +1,13 @@
 /* eslint-disable no-global-assign, no-native-reassign, no-unused-vars, no-eval */
 var loadTestFragment = require('./support/loadTestFragment')
-var Crocon
-var crocon
+var Logalize
+var logalize
 
 beforeAll(function () {
   document.hasFocus = function () { return true }
   console = require('./support/console')
 
-  Crocon = require('../src/')
+  Logalize = require('../src/')
 })
 
 beforeEach(function () {
@@ -16,7 +16,7 @@ beforeEach(function () {
     setItem: function (key, value) { this[key] = value },
     getItem: function (key) { return this[key] }
   }
-  crocon = new Crocon({ enableFormatting: false })
+  logalize = new Logalize({ enableFormatting: false })
 })
 
 eval(loadTestFragment('basicLogging'))

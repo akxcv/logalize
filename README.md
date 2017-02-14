@@ -1,13 +1,11 @@
-# Crocon 🐊
+# Logalize
 
-**Crocon makes developer console great again.**
+Logalize is a Javascript wrapper for browser's developer console. Its goal is to make debugging
+easier.
 
-Crocon is a Javascript wrapper for browser's developer console. Its goal is to make debugging
-painless, convenient and beautiful.
+[Rails gem](https://github.com/akxcv/logalize-rails)
 
-[Rails gem](https://github.com/akxcv/crocon-rails)
-
-## Why?
+## Motivation
 
 The builtin developer console in modern browsers suffers from a number of problems. Here are some
 of the big ones:
@@ -23,11 +21,11 @@ is still possible (e.x. `if (!debug) console.log = function () {}`), but it's no
 if you use other console methods (which you should!). Also, imagine you want to be able to
 see debugging output in production while normal website users don't see anything. What do you do?
 
-Crocon solves this problem by introducing a flexible enable/disable mechanism. First of all, you
-can enable or disable it during initialization: `crocon = new Crocon({ enabled: debug })`
+Logalize solves this problem by introducing a flexible enable/disable mechanism. First of all, you
+can enable or disable it during initialization: `logalize = new Logalize({ enabled: debug })`
 (assuming that `debug` is `true` in development and `false` in production). But also, you can
-enable or disable Crocon in your browser (`crocon.enable()` or `crocon.disable()`), which will
-override the global `enabled` option. Thus, you can easily switch Crocon on/off in any environment,
+enable or disable Logalize in your browser (`logalize.enable()` or `logalize.disable()`), which will
+override the global `enabled` option. Thus, you can easily switch Logalize on/off in any environment,
 and it will only affect *your* console.
 
 See [initialization options](#initialization-options).
@@ -64,14 +62,14 @@ Result:
 
 ![Async and groups](/images/async_console_groups.png?raw=true)
 
-Crocon solves this by creating a different implementation of groups. With Crocon, you can use
+Logalize solves this by creating a different implementation of groups. With Logalize, you can use
 groups like this:
 
 ```js
-crocon.group('my namespace').log('hello from my namespace')
+logalize.group('my namespace').log('hello from my namespace')
 /* or */
-crocon.group('my namespace', function () {
-  crocon.log('hello from my namespace')
+logalize.group('my namespace', function () {
+  logalize.log('hello from my namespace')
   /* ... */
 })
 ```
@@ -92,7 +90,7 @@ Result:
 
 This is awesome, but really not convenient.
 
-Crocon makes formatting much easier by introducing a markdown-like syntax. See [formatting](#formatting).
+Logalize makes formatting much easier by introducing a markdown-like syntax. See [formatting](#formatting).
 
 ## Browser support
 
@@ -127,13 +125,13 @@ as well as
 support lambda syntax:
 
 ```js
-crocon.profile('profile1')
+logalize.profile('profile1')
 myVar = myFunction()
-crocon.profileEnd()
+logalize.profileEnd()
 
 /* is the same as */
 
-myVar = crocon.profile('profile1', myFunction)
+myVar = logalize.profile('profile1', myFunction)
 ```
 
 - `group` is described in [grouping](#grouping).
@@ -141,50 +139,50 @@ myVar = crocon.profile('profile1', myFunction)
 ### Initialization options
 
 ```js
-crocon = new Crocon({
+logalize = new Logalize({
   enabled: true,
   enableFormatting: true,
   collapseGroups: false,
   modifyConsole: true
 })
 ```
-- `enabledByDefault`: Defines whether to enable or disable Crocon.
-When Crocon is disabled, it will not produce any output. However, lambda versions of `profile`, `time` and `group` will still execute given functions. Default: `true`.
+- `enabledByDefault`: Defines whether to enable or disable Logalize.
+When Logalize is disabled, it will not produce any output. However, lambda versions of `profile`, `time` and `group` will still execute given functions. Default: `true`.
 - `enableFormatting`: Defines whether [formatting](#formatting) should be enabled. Default: `true`.
 - `collapseGroups`: Defines whether [groups](#grouping) should be
 collapsed or not. Default: `false` (expanded).
-- `modifyConsole`: Defines whether Crocon needs to modify `console` upon initialization.
-Generally, modifying global objects is a bad thing to do, but this is required if you want Crocon to
-handle console output correctly. Crocon is modifying `console` functions *very carefully* (it just
+- `modifyConsole`: Defines whether Logalize needs to modify `console` upon initialization.
+Generally, modifying global objects is a bad thing to do, but this is required if you want Logalize to
+handle console output correctly. Logalize is modifying `console` functions *very carefully* (it just
 needs to hook to those methods). You can safely disable this options, but regular console output
 will occasionally get stuck inside groups it does not belong to. see [known issues](#known-issues). Default: `true`.
 
 ### Grouping
 
-Groups in Crocon work a little different from console's groups. There are two ways to group the output.
+Groups in Logalize work a little different from console's groups. There are two ways to group the output.
 
 ```js
 /* method 1 */
-crocon.group('group one').log('inside group 1')
+logalize.group('group one').log('inside group 1')
 
 /* method 2 */
-crocon.group('group one', function () {
-  crocon.log('inside group 1')
+logalize.group('group one', function () {
+  logalize.log('inside group 1')
 })
 ```
 
 You can easily mix methods together and nest groups however you want:
 
 ```js
-crocon.group('user login', function () {
-  crocon.info('user login started')
-  crocon.group('credentials').log('credentials are [correct].green')
+logalize.group('user login', function () {
+  logalize.info('user login started')
+  logalize.group('credentials').log('credentials are [correct].green')
   /* code */
-  crocon.info('[success].badge.green')
+  logalize.info('[success].badge.green')
 })
 
-crocon.group('group 1').log('some more output')
-crocon.group('group 1', 'another group!').log('still nested correctly')
+logalize.group('group 1').log('some more output')
+logalize.group('group 1', 'another group!').log('still nested correctly')
 ```
 
 Output:
@@ -199,7 +197,7 @@ This behaviour is explained in [known issues](#known-issues).
 
 ### Formatting
 
-Crocon supports Markdown-like string formatting. Here's the options:
+Logalize supports Markdown-like string formatting. Here's the options:
 - `**bold**`
 - `*italic*`
 - `~strikethrough~`
@@ -212,7 +210,7 @@ Objects and functions are not formattable, but they likely will be in the future
 
 #### Color classes
 
-Crocon supports following color classes (both for badges and normal text):
+Logalize supports following color classes (both for badges and normal text):
 - `.blue`
 - `.orange`
 - `.red`
@@ -240,24 +238,16 @@ This enables us to change how groups work if `document` is not in focus (say, `c
 However, some things (like `throw` or click on the "clear console" button) are simply not catchable.
 So, **some output will inevitably get stuck in a group it doesn't belong**. Beware of this, especially when using `collapseGroups = true`.
 
-- **Stack traces from `crocon.error` and `crocon.trace` contain unneeded information**.
-Since `crocon.error` and `crocon.trace` call some functions under the hood, the stack trace produced
+- **Stack traces from `logalize.error` and `logalize.trace` contain unneeded information**.
+Since `logalize.error` and `logalize.trace` call some functions under the hood, the stack trace produced
 by those functions will contain several unneeded calls.
 
 *All of this is according to the author's research. If you know a solution to this problem, you're
-highly encouraged to open an issue and/or a pull request at [akxcv/crocon](https://github.com/akxcv/crocon).*
-
-## Installation
-
-```
-npm install -S crocon
-```
-
-Require `crocon` (or `dist/crocon.js`) in your Javascript, require `dist/crocon.css` in your CSS.
+highly encouraged to open an issue and/or a pull request at [akxcv/logalize](https://github.com/akxcv/logalize).*
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/akxcv/crocon.
+Bug reports and pull requests are welcome on GitHub at https://github.com/akxcv/logalize.
 
 ## License
 

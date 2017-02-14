@@ -1,4 +1,4 @@
-#crocon {
+#logalize {
   color: black;
   background-color: transparent;
   border-radius: 0;
@@ -6,50 +6,50 @@
   margin: 0;
   font-weight: normal;
   font-style: normal; }
-  #crocon.badge {
+  #logalize.badge {
     color: white;
     background-color: black;
     border-radius: 3px;
     padding: 2px;
     margin: 0 2px; }
-    #crocon.badge.blue {
+    #logalize.badge.blue {
       color: white;
       background-color: #61afef; }
-    #crocon.badge.orange {
+    #logalize.badge.orange {
       color: white;
       background-color: #d19a66; }
-    #crocon.badge.red {
+    #logalize.badge.red {
       color: white;
       background-color: #e06c75; }
-    #crocon.badge.green {
+    #logalize.badge.green {
       color: white;
       background-color: #98c379; }
-    #crocon.badge.cyan {
+    #logalize.badge.cyan {
       color: white;
       background-color: #56b6c2; }
-    #crocon.badge.purple {
+    #logalize.badge.purple {
       color: white;
       background-color: #c678dd; }
-    #crocon.badge.focus {
+    #logalize.badge.focus {
       color: #bada55;
       background: #444; }
-  #crocon.blue {
+  #logalize.blue {
     color: #4078f2; }
-  #crocon.orange {
+  #logalize.orange {
     color: #986801; }
-  #crocon.red {
+  #logalize.red {
     color: #e45649; }
-  #crocon.green {
+  #logalize.green {
     color: #50a14f; }
-  #crocon.cyan {
+  #logalize.cyan {
     color: #0184bc; }
-  #crocon.purple {
+  #logalize.purple {
     color: #a626a4; }
-  #crocon.bold {
+  #logalize.bold {
     font-weight: bold; }
-  #crocon.italic {
+  #logalize.italic {
     font-style: italic; }
-  #crocon.strikethrough {
+  #logalize.strikethrough {
     text-decoration: line-through; }
-  #crocon.underline {
+  #logalize.underline {
     text-decoration: underline; }

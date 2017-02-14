@@ -71,7 +71,7 @@ var Formatter = {
   computeStyle: function (classes) {
     // Create a temporary div to compute styles
     var div = document.createElement('div')
-    div.id = 'crocon'
+    div.id = 'logalize'
     div.className = classes
     div.style = 'display: none;'
 

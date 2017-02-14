@@ -2,7 +2,7 @@ var GroupManager = require('./groupManager')
 var BrowserAdapter = require('./browserAdapter')
 var Formatter = require('./formatter')
 
-function Crocon (opts) {
+function Logalize (opts) {
   var defaultOpts = {
     enabled: true,
     enableFormatting: true,
@@ -88,7 +88,7 @@ function Crocon (opts) {
   }
 }
 
-Crocon.prototype = {
+Logalize.prototype = {
   log: function () {
     this.print('log', [].slice.call(arguments))
   },
@@ -209,21 +209,21 @@ Crocon.prototype = {
   // Enable / disable
 
   enable: function () {
-    if (localStorage) localStorage.setItem('croconEnabled', 'true')
+    if (localStorage) localStorage.setItem('logalizeEnabled', 'true')
   },
   disable: function () {
-    if (localStorage) localStorage.setItem('croconEnabled', 'false')
+    if (localStorage) localStorage.setItem('logalizeEnabled', 'false')
   },
 
   // Private
 
   _isEnabled: function () {
-    if (localStorage && localStorage.croconEnabled) {
-      return localStorage.croconEnabled !== 'false'
+    if (localStorage && localStorage.logalizeEnabled) {
+      return localStorage.logalizeEnabled !== 'false'
     } else {
       return this.enabled
     }
   }
 }
 
-module.exports = Crocon
+module.exports = Logalize

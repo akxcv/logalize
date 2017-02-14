@@ -1,0 +1,1 @@
+window.Logalize = require('./index')

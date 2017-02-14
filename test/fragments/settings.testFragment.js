@@ -1,19 +1,19 @@
 describe('enable/disable', function () {
-  var enabledCrocon, disabledCrocon
+  var enabledLogalize, disabledLogalize
   beforeEach(function () {
-    enabledCrocon = new Crocon({ enabled: true })
-    disabledCrocon = new Crocon({ enabled: false })
+    enabledLogalize = new Logalize({ enabled: true })
+    disabledLogalize = new Logalize({ enabled: false })
   })
 
   it('inherits init settings', function () {
-    expect(enabledCrocon._isEnabled()).toBe(true)
-    expect(disabledCrocon._isEnabled()).toBe(false)
+    expect(enabledLogalize._isEnabled()).toBe(true)
+    expect(disabledLogalize._isEnabled()).toBe(false)
   })
 
   it('prefers clientside settings', function () {
-    enabledCrocon.disable()
-    expect(enabledCrocon._isEnabled()).toBe(false)
-    disabledCrocon.enable()
-    expect(disabledCrocon._isEnabled()).toBe(true)
+    enabledLogalize.disable()
+    expect(enabledLogalize._isEnabled()).toBe(false)
+    disabledLogalize.enable()
+    expect(disabledLogalize._isEnabled()).toBe(true)
   })
 })

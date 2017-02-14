@@ -1,7 +1,7 @@
 {
-  "name": "crocon",
-  "version": "0.1.0",
-  "description": "Makes developer console great again",
+  "name": "logalize",
+  "version": "0.0.1",
+  "description": "A better window.console",
   "keywords": [
     "browser",
     "colors",
@@ -13,13 +13,13 @@
   ],
   "main": "src/index.js",
   "scripts": {
-    "compile": "browserify -g uglifyify app.js > dist/crocon.js && node-sass index.scss dist/crocon.css",
+    "compile": "browserify -g uglifyify src/app.js > dist/logalize.js && node-sass index.scss dist/logalize.css",
     "lint": "eslint src/*.js test/*.js; exit 0",
     "test": "jest --coverage"
   },
   "author": "Alexander Komarov <ak@akxcv.com> (http://akxcv.com)",
   "license": "MIT",
-  "repository": "akxcv/crocon",
+  "repository": "akxcv/logalize",
   "dependencies": {},
   "devDependencies": {
     "browserify": "^14.0.0",

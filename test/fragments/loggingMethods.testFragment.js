@@ -1,6 +1,6 @@
 test('debug', function () {
-  crocon.debug('hello', 1, null, { id: 1 })
-  crocon.debug('hello', 'world')
+  logalize.debug('hello', 1, null, { id: 1 })
+  logalize.debug('hello', 'world')
   expect(console.debugs.length).toBe(2)
   expect(console.debugs).toEqual([
     { args: ['hello', 1, null, { id: 1 }], groupStack: [] },
@@ -9,8 +9,8 @@ test('debug', function () {
 })
 
 test('info', function () {
-  crocon.info('hello', 1, null, { id: 1 })
-  crocon.info('hello', 'world')
+  logalize.info('hello', 1, null, { id: 1 })
+  logalize.info('hello', 'world')
   expect(console.infos.length).toBe(2)
   expect(console.infos).toEqual([
     { args: ['hello', 1, null, { id: 1 }], groupStack: [] },
@@ -19,8 +19,8 @@ test('info', function () {
 })
 
 test('warn', function () {
-  crocon.warn('hello', 1, null, { id: 1 })
-  crocon.warn('hello', 'world')
+  logalize.warn('hello', 1, null, { id: 1 })
+  logalize.warn('hello', 'world')
   expect(console.warns.length).toBe(2)
   expect(console.warns).toEqual([
     { args: ['hello', 1, null, { id: 1 }], groupStack: [] },
@@ -29,8 +29,8 @@ test('warn', function () {
 })
 
 test('error', function () {
-  crocon.error('hello', 1, null, { id: 1 })
-  crocon.error('hello', 'world')
+  logalize.error('hello', 1, null, { id: 1 })
+  logalize.error('hello', 'world')
   expect(console.errors.length).toBe(2)
   expect(console.errors).toEqual([
     { args: ['hello', 1, null, { id: 1 }], groupStack: [] },
@@ -39,8 +39,8 @@ test('error', function () {
 })
 
 test('assert', function () {
-  crocon.assert(5 > 6, 'oops')
-  crocon.assert(6 > 5, 'yay')
+  logalize.assert(5 > 6, 'oops')
+  logalize.assert(6 > 5, 'yay')
   expect(console.asserts.length).toBe(2)
   expect(console.asserts).toEqual([
     { args: [false, 'oops'], groupStack: [] },
@@ -49,8 +49,8 @@ test('assert', function () {
 })
 
 test('count', function () {
-  crocon.count('myCount')
-  crocon.count('myOtherCount')
+  logalize.count('myCount')
+  logalize.count('myOtherCount')
   expect(console.counts.length).toBe(2)
   expect(console.counts).toEqual([
     { label: 'myCount', groupStack: [] },
@@ -59,8 +59,8 @@ test('count', function () {
 })
 
 test('dir', function () {
-  crocon.dir({ id: 1 })
-  crocon.dir(null)
+  logalize.dir({ id: 1 })
+  logalize.dir(null)
   expect(console.dirs.length).toBe(2)
   expect(console.dirs).toEqual([
     { object: { id: 1 }, groupStack: [] },
@@ -69,8 +69,8 @@ test('dir', function () {
 })
 
 test('dirxml', function () {
-  crocon.dirxml({ id: 1 })
-  crocon.dirxml(null)
+  logalize.dirxml({ id: 1 })
+  logalize.dirxml(null)
   expect(console.dirxmls.length).toBe(2)
   expect(console.dirxmls).toEqual([
     { object: { id: 1 }, groupStack: [] },
@@ -79,61 +79,61 @@ test('dirxml', function () {
 })
 
 test('profile', function () {
-  var ret1 = crocon.profile('hello', 'world')
+  var ret1 = logalize.profile('hello', 'world')
   expect(console.profiles.length).toBe(1)
   expect(console.profileEnds).toBe(0)
   expect(console.profiles[0]).toEqual(['hello'])
   expect(ret1).toBe(undefined)
 
-  var ret2 = crocon.profile('hello', 'world', function () { return 'str' })
+  var ret2 = logalize.profile('hello', 'world', function () { return 'str' })
   expect(console.profiles.length).toBe(2)
   expect(console.profileEnds).toBe(1)
   expect(console.profiles[1]).toEqual(['hello'])
   expect(ret2).toBe('str')
 
-  var disabledCrocon = new Crocon({ enabled: false })
-  var ret3 = disabledCrocon.profile('hello', 'world', function () { return 'str' })
+  var disabledLogalize = new Logalize({ enabled: false })
+  var ret3 = disabledLogalize.profile('hello', 'world', function () { return 'str' })
   expect(console.profiles.length).toBe(2)
   expect(console.profileEnds).toBe(1)
   expect(ret3).toBe('str')
 
-  crocon.profileEnd()
+  logalize.profileEnd()
   expect(console.profileEnds).toBe(2)
 })
 
 test('time', function () {
-  var ret1 = crocon.time('hello1', 'world')
+  var ret1 = logalize.time('hello1', 'world')
   expect(console.times.length).toBe(1)
   expect(console.timeEnds.length).toBe(0)
   expect(console.times[0]).toEqual(['hello1'])
   expect(ret1).toBe(undefined)
 
-  var ret2 = crocon.time('hello2', 'world', function () { return 'str' })
+  var ret2 = logalize.time('hello2', 'world', function () { return 'str' })
   expect(console.times.length).toBe(2)
   expect(console.timeEnds.length).toBe(1)
   expect(console.times[1]).toEqual(['hello2'])
   expect(console.timeEnds[0]).toEqual(['hello2'])
   expect(ret2).toBe('str')
 
-  var disabledCrocon = new Crocon({ enabled: false })
-  var ret3 = disabledCrocon.time('hello3', 'world', function () { return 'str' })
+  var disabledLogalize = new Logalize({ enabled: false })
+  var ret3 = disabledLogalize.time('hello3', 'world', function () { return 'str' })
   expect(console.times.length).toBe(2)
   expect(console.timeEnds.length).toBe(1)
   expect(ret3).toBe('str')
 
-  crocon.timeEnd('hello1')
+  logalize.timeEnd('hello1')
   expect(console.timeEnds.length).toBe(2)
   expect(console.timeEnds[1]).toEqual(['hello1'])
 })
 
 test('timeStamp', function () {
-  crocon.timeStamp('arg1', 'arg2')
+  logalize.timeStamp('arg1', 'arg2')
   expect(console.timeStamps.length).toBe(1)
   expect(console.timeStamps[0]).toEqual('arg1')
 })
 
 test('trace', function () {
-  crocon.trace('arg1', 'arg2')
+  logalize.trace('arg1', 'arg2')
   expect(console.traces).toEqual([
     { object: 'arg1', groupStack: [] }
   ])

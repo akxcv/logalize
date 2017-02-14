@@ -1,4 +1,4 @@
-// Console has to be overridden before Crocon is required
+// Console has to be overridden before Logalize is required
 module.exports = {
   logs: [],
   debugs: [],
