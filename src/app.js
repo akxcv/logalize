@@ -1,1 +1,2 @@
-window.Logalize = require('./index')
+import Logalize from './index'
+window.Logalize = Logalize

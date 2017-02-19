@@ -1,4 +1,4 @@
-var Formatter = require('../src/formatter')
+import Formatter from '../src/formatter'
 Formatter.computeStyle = function (classes) { return classes }
 
 it('formats strings', function () {

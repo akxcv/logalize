@@ -1,5 +1,5 @@
 // Console has to be overridden before Logalize is required
-module.exports = {
+export default {
   logs: [],
   debugs: [],
   infos: [],

@@ -113,4 +113,4 @@ var Formatter = {
   ]
 }
 
-module.exports = Formatter
+export default Formatter

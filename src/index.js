@@ -1,6 +1,8 @@
-var GroupManager = require('./groupManager')
-var BrowserAdapter = require('./browserAdapter')
-var Formatter = require('./formatter')
+import GroupManager from './groupManager'
+import BrowserAdapter from './browserAdapter'
+import Formatter from './formatter'
+
+export default Logalize
 
 function Logalize ({
   enabled = true,
@@ -8,7 +10,6 @@ function Logalize ({
   collapseGroups = false,
   setupConsoleHooks = true
 } = {}) {
-
   Object.assign(this, {
     enabled,
     enableFormatting,
@@ -220,5 +221,3 @@ Logalize.prototype = {
     }
   }
 }
-
-module.exports = Logalize

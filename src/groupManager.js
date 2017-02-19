@@ -1,4 +1,4 @@
-var BrowserAdapter = require('./browserAdapter')
+import BrowserAdapter from './browserAdapter'
 
 var GroupManager = {
   currentStack: [],
@@ -52,4 +52,4 @@ var GroupManager = {
   }
 }
 
-module.exports = GroupManager
+export default GroupManager

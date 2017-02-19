@@ -1,15 +1,10 @@
 /* eslint-disable no-global-assign, no-native-reassign, no-unused-vars, no-eval */
-var loadTestFragment = require('./support/loadTestFragment')
-var Logalize
+import loadTestFragment from './support/loadTestFragment'
 var logalize
 global.localStorage = {}
-
-beforeAll(function () {
-  document.hasFocus = function () { return true }
-  console = require('./support/console')
-
-  Logalize = require('../src/')
-})
+document.hasFocus = function () { return true }
+import console from './support/console'
+import Logalize from '../src/'
 
 beforeEach(function () {
   console._clearArrays()

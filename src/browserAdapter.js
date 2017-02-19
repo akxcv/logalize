@@ -22,4 +22,4 @@ var BrowserAdapter = {
   trace: console.trace
 }
 
-module.exports = BrowserAdapter
+export default BrowserAdapter
