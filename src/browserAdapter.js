@@ -1,4 +1,4 @@
-var BrowserAdapter = {
+const BrowserAdapter = {
   // Basic logging
   log: console.log,
   debug: console.debug,

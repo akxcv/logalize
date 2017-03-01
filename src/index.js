@@ -1,48 +1,52 @@
 import BrowserAdapter from './browserAdapter'
 import Formatter from './formatter'
 
-export default Logalize
-
-function Logalize ({
-  enabled = true,
-  enableFormatting = true,
-  setupConsoleHooks = true
-} = {}) {
-  Object.assign(this, {
-    enabled,
-    enableFormatting,
-    setupConsoleHooks,
-    formattableMethods: ['log', 'info', 'debug', 'warn', 'error', 'focus']
-  })
-
-  function performConsoleAction (action, args) {
-    return BrowserAdapter[action](...args)
-  }
-
-  if (this.setupConsoleHooks) {
-    console.log = () => performConsoleAction('log', arguments)
-    console.debug = () => performConsoleAction('debug', arguments)
-    console.info = () => performConsoleAction('info', arguments)
-    console.warn = () => performConsoleAction('warn', arguments)
-    console.error = () => performConsoleAction('error', arguments)
-    console.assert = () => performConsoleAction('assert', arguments)
-    // console.clear = () => GroupManager.clear()
-    console.count = () => performConsoleAction('count', arguments)
-    console.dir = () => performConsoleAction('dir', arguments)
-    console.dirxml = () => performConsoleAction('dirxml', arguments)
-    console.group = () => performConsoleAction('group', arguments)
-    console.groupCollapsed = () => performConsoleAction('groupCollapsed', arguments)
-    console.groupEnd = () => performConsoleAction('groupEnd', arguments)
-    console.profile = () => performConsoleAction('profile', arguments)
-    console.profileEnd = () => performConsoleAction('profileEnd', arguments)
-    console.time = () => performConsoleAction('time', arguments)
-    console.timeEnd = () => performConsoleAction('timeEnd', arguments)
-    console.timeStamp = () => performConsoleAction('timeStamp', arguments)
-    console.trace = () => performConsoleAction('trace', arguments)
-  }
+function Logalize (...args) {
+  Logalize.print('log', ...args)
 }
 
-Logalize.prototype = {
+Object.assign(Logalize, {
+  configure ({
+    enabled = true,
+    enableFormatting = true,
+    setupConsoleHooks = true
+  } = {}) {
+    Object.assign(this, {
+      enabled,
+      enableFormatting,
+      setupConsoleHooks,
+      formattableMethods: ['log', 'info', 'debug', 'warn', 'error', 'focus']
+    })
+
+    function performConsoleAction (action, args) {
+      return BrowserAdapter[action](...args)
+    }
+
+    if (this.setupConsoleHooks) {
+      console.log            = function () { performConsoleAction('log', arguments) }
+      console.debug          = function () { performConsoleAction('debug', arguments) }
+      console.info           = function () { performConsoleAction('info', arguments) }
+      console.warn           = function () { performConsoleAction('warn', arguments) }
+      console.error          = function () { performConsoleAction('error', arguments) }
+      console.assert         = function () { performConsoleAction('assert', arguments) }
+      // console.clear       = function () { GroupManager.clear() }
+      console.count          = function () { performConsoleAction('count', arguments) }
+      console.dir            = function () { performConsoleAction('dir', arguments) }
+      console.dirxml         = function () { performConsoleAction('dirxml', arguments) }
+      console.group          = function () { performConsoleAction('group', arguments) }
+      console.groupCollapsed = function () { performConsoleAction('groupCollapsed', arguments) }
+      console.groupEnd       = function () { performConsoleAction('groupEnd', arguments) }
+      console.profile        = function () { performConsoleAction('profile', arguments) }
+      console.profileEnd     = function () { performConsoleAction('profileEnd', arguments) }
+      console.time           = function () { performConsoleAction('time', arguments) }
+      console.timeEnd        = function () { performConsoleAction('timeEnd', arguments) }
+      console.timeStamp      = function () { performConsoleAction('timeStamp', arguments) }
+      console.trace          = function () { performConsoleAction('trace', arguments) }
+    }
+
+    return this
+  },
+
   log () {
     this.print('log', ...arguments)
   },
@@ -160,4 +164,6 @@ Logalize.prototype = {
       return this.enabled
     }
   }
-}
+})
+
+export default Logalize

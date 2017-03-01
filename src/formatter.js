@@ -1,4 +1,4 @@
-var Formatter = {
+const Formatter = {
   format (args) {
     var formattedStrings = []
     var styles = []

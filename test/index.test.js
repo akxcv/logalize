@@ -1,12 +1,12 @@
 /* eslint-disable no-global-assign, no-native-reassign, no-unused-vars, no-eval */
-var Logalize
 var logalize
 global.localStorage = {}
 
 beforeAll(function () {
   document.hasFocus = () => true
   console = require('./support/console')
-  Logalize = require('./support/logalize')
+  logalize = require('./support/logalize')
+  logalize.configure()
 })
 
 beforeEach(function () {
@@ -15,7 +15,7 @@ beforeEach(function () {
     setItem: function (key, value) { this[key] = value },
     getItem: function (key) { return this[key] }
   }
-  logalize = new Logalize({ enableFormatting: false })
+  logalize.configure({ enabled: true, enableFormatting: false })
 })
 
 it('produces simple output', function () {
@@ -25,6 +25,9 @@ it('produces simple output', function () {
   logalize.log([])
   expect(console.logs.length).toBe(2)
   expect(console.logs[1]).toEqual([[]])
+  logalize('im static')
+  expect(console.logs.length).toBe(3)
+  expect(console.logs[2]).toEqual(['im static'])
 })
 
 it('produces output with multiple arguments', function () {
@@ -38,8 +41,9 @@ it('produces output with multiple arguments', function () {
 })
 
 it('does not produce output when disabled', function () {
-  logalize = new Logalize({ enabled: false })
+  logalize.configure({ enabled: false })
   logalize.log('hi')
+  logalize('hi')
   expect(console.logs).toEqual([])
 })
 
@@ -136,13 +140,13 @@ test('profile', function () {
   expect(console.profiles[1]).toEqual(['hello'])
   expect(ret2).toBe('str')
 
-  var disabledLogalize = new Logalize({ enabled: false })
-  var ret3 = disabledLogalize.profile('hello', 'world', function () { return 'str' })
+  logalize.configure({ enabled: false })
+  var ret3 = logalize.profile('hello', 'world', function () { return 'str' })
   expect(console.profiles.length).toBe(2)
   expect(console.profileEnds).toBe(1)
   expect(ret3).toBe('str')
 
-  logalize.profileEnd()
+  logalize.configure({ enabled: true }).profileEnd()
   expect(console.profileEnds).toBe(2)
 })
 
@@ -160,13 +164,13 @@ test('time', function () {
   expect(console.timeEnds[0]).toEqual(['hello2'])
   expect(ret2).toBe('str')
 
-  var disabledLogalize = new Logalize({ enabled: false })
-  var ret3 = disabledLogalize.time('hello3', 'world', function () { return 'str' })
+  logalize.configure({ enabled: false })
+  var ret3 = logalize.time('hello3', 'world', function () { return 'str' })
   expect(console.times.length).toBe(2)
   expect(console.timeEnds.length).toBe(1)
   expect(ret3).toBe('str')
 
-  logalize.timeEnd('hello1')
+  logalize.configure({ enabled: true }).timeEnd('hello1')
   expect(console.timeEnds.length).toBe(2)
   expect(console.timeEnds[1]).toEqual(['hello1'])
 })
@@ -197,13 +201,13 @@ test('group', function () {
   expect(console.groups[1]).toEqual(['hello', 'world'])
   expect(ret2).toBe('str')
 
-  var disabledLogalize = new Logalize({ enabled: false })
-  var ret3 = disabledLogalize.group('hello', 'world', function () { return 'str' })
+  logalize.configure({ enabled: false })
+  var ret3 = logalize.group('hello', 'world', function () { return 'str' })
   expect(console.groups.length).toBe(2)
   expect(console.groupEnds).toBe(1)
   expect(ret3).toBe('str')
 
-  logalize.groupEnd()
+  logalize.configure({ enabled: true }).groupEnd()
   expect(console.groupEnds).toBe(2)
 })
 
@@ -220,32 +224,27 @@ test('groupCollapsed', function () {
   expect(console.collapsedGroups[1]).toEqual(['hello', 'world'])
   expect(ret2).toBe('str')
 
-  var disabledLogalize = new Logalize({ enabled: false })
-  var ret3 = disabledLogalize.groupCollapsed('hello', 'world', function () { return 'str' })
+  logalize.configure({ enabled: false })
+  var ret3 = logalize.groupCollapsed('hello', 'world', function () { return 'str' })
   expect(console.collapsedGroups.length).toBe(2)
   expect(console.groupEnds).toBe(1)
   expect(ret3).toBe('str')
 
-  logalize.groupEnd()
+  logalize.configure({ enabled: true }).groupEnd()
   expect(console.groupEnds).toBe(2)
 })
 
 describe('enable/disable', function () {
-  var enabledLogalize, disabledLogalize
-  beforeEach(function () {
-    enabledLogalize = new Logalize({ enabled: true })
-    disabledLogalize = new Logalize({ enabled: false })
-  })
-
   it('inherits init settings', function () {
-    expect(enabledLogalize._isEnabled()).toBe(true)
-    expect(disabledLogalize._isEnabled()).toBe(false)
+    expect(logalize.configure({ enabled: true  })._isEnabled()).toBe(true)
+    expect(logalize.configure({ enabled: false })._isEnabled()).toBe(false)
   })
 
   it('prefers clientside settings', function () {
-    enabledLogalize.disable()
-    expect(enabledLogalize._isEnabled()).toBe(false)
-    disabledLogalize.enable()
-    expect(disabledLogalize._isEnabled()).toBe(true)
+    logalize.configure({ enabled: true  }).disable()
+    expect(logalize._isEnabled()).toBe(false)
+
+    logalize.configure({ enabled: false }).enable()
+    expect(logalize._isEnabled()).toBe(true)
   })
 })

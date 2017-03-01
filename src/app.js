@@ -1,2 +1,3 @@
-import Logalize from './index'
-window.Logalize = Logalize
+import Logalize from './'
+window.logalize = Logalize
+window.logalize.configure()
