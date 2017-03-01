@@ -5,10 +5,6 @@ class Namespace {
     this.stack = args || []
   }
 
-  print (method, ...args) {
-    BrowserAdapter[method](...args)
-  }
-
   transitionInto (...namespaces) {
     var newStack = []
     for (let ns of namespaces) newStack.push(...ns.stack)

@@ -63,6 +63,7 @@ it('supports clojure syntax', function () {
     logalize.namespace(20, 42, function () {
       logalize.log('log #2.5')
     })
+    logalize.log('log #3')
     return 'hello'
   })
   expect(console.logs).toEqual([
@@ -85,6 +86,10 @@ it('supports clojure syntax', function () {
     {
       args: ['log #2.5'],
       groupStack: [[1], [20], [42]]
+    },
+    {
+      args: ['log #3'],
+      groupStack: [[1]]
     }
   ])
   expect(val).toBe('hello')

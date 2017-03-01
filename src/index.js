@@ -26,7 +26,6 @@ Object.assign(Logalize, {
       formattableMethods: ['log', 'info', 'debug', 'warn', 'error', 'focus']
     })
 
-    // dirty, i know
     const self = this
     function performConsoleAction (action, args) {
       self.previousNamespace.close()
@@ -74,7 +73,6 @@ Object.assign(Logalize, {
       }
       const returnValue = func()
       if (this._isEnabled()) {
-        this.previousNamespace.transitionInto(oldClojureNamespace)
         this.clojureNamespace = oldClojureNamespace
       }
       return returnValue
@@ -190,7 +188,6 @@ Object.assign(Logalize, {
     } else {
       this.previousNamespace.transitionInto(this.clojureNamespace, this.currentNamespace)
       BrowserAdapter[method](...args)
-      // this.currentNamespace.print(method, ...args)
     }
     this.currentNamespace = new Namespace()
   },
