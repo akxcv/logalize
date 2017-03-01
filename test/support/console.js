@@ -1,5 +1,5 @@
 // Console has to be overridden before Logalize is required
-export default {
+module.exports = {
   logs: [],
   debugs: [],
   infos: [],
@@ -15,62 +15,64 @@ export default {
   timeEnds: [],
   timeStamps: [],
   traces: [],
-  groupStack: [],
-  log: function (...args) {
-    console.logs.push({ args: args, groupStack: console.groupStack })
+  groups: [],
+  collapsedGroups: [],
+  groupEnds: 0,
+  log (...args) {
+    console.logs.push(args)
   },
-  debug: function (...args) {
-    console.debugs.push({ args: args, groupStack: console.groupStack })
+  debug (...args) {
+    console.debugs.push(args)
   },
-  info: function (...args) {
-    console.infos.push({ args: args, groupStack: console.groupStack })
+  info (...args) {
+    console.infos.push(args)
   },
-  warn: function (...args) {
-    console.warns.push({ args: args, groupStack: console.groupStack })
+  warn (...args) {
+    console.warns.push(args)
   },
-  error: function (...args) {
-    console.errors.push({ args: args, groupStack: console.groupStack })
+  error (...args) {
+    console.errors.push(args)
   },
-  assert: function (...args) {
-    console.asserts.push({ args: args, groupStack: console.groupStack })
+  assert (...args) {
+    console.asserts.push(args)
   },
-  count: function (label) {
-    console.counts.push({ label: label, groupStack: console.groupStack })
+  count (label) {
+    console.counts.push(label)
   },
-  dir: function (object) {
-    console.dirs.push({ object: object, groupStack: console.groupStack })
+  dir (object) {
+    console.dirs.push(object)
   },
-  dirxml: function (object) {
-    console.dirxmls.push({ object: object, groupStack: console.groupStack })
+  dirxml (object) {
+    console.dirxmls.push(object)
   },
-  profile: function (...args) {
+  profile (...args) {
     console.profiles.push(args)
   },
-  profileEnd: function () {
+  profileEnd () {
     console.profileEnds += 1
   },
-  time: function (...args) {
+  time (...args) {
     console.times.push(args)
   },
-  timeEnd: function (...args) {
+  timeEnd (...args) {
     console.timeEnds.push(args)
   },
-  timeStamp: function (label) {
+  timeStamp (label) {
     console.timeStamps.push(label)
   },
-  trace: function (object) {
-    console.traces.push({ object: object, groupStack: console.groupStack })
+  trace (object) {
+    console.traces.push(object)
   },
-  group: function (name) {
-    console.groupStack.push({ name: name, collapsed: false })
+  group (...args) {
+    console.groups.push(args)
   },
-  groupCollapsed: function (name) {
-    console.groupStack.push({ name: name, collapsed: true })
+  groupCollapsed (...args) {
+    console.collapsedGroups.push(args)
   },
-  groupEnd: function () {
-    console.groupStack.pop()
+  groupEnd () {
+    console.groupEnds += 1
   },
-  _clearArrays: function () {
+  _clearArrays () {
     console.logs = []
     console.debugs = []
     console.infos = []
@@ -86,6 +88,8 @@ export default {
     console.timeEnds = []
     console.timeStamps = []
     console.traces = []
-    console.groupStack = []
+    console.groups = []
+    console.collapsedGroups = []
+    console.groupEnds = 0
   }
 }

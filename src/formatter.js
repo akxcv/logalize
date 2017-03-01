@@ -74,7 +74,7 @@ var Formatter = {
 
     // Append the div to the DOM and compute styles
     document.getElementsByTagName('body')[0].appendChild(div)
-    var computedStyle = getComputedStyle(div)
+    const computedStyle = getComputedStyle(div)
     var styles = []
 
     for (let s of this.supportedStyles) {

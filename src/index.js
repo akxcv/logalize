@@ -1,4 +1,3 @@
-import GroupManager from './groupManager'
 import BrowserAdapter from './browserAdapter'
 import Formatter from './formatter'
 
@@ -7,82 +6,39 @@ export default Logalize
 function Logalize ({
   enabled = true,
   enableFormatting = true,
-  collapseGroups = false,
   setupConsoleHooks = true
 } = {}) {
   Object.assign(this, {
     enabled,
     enableFormatting,
-    collapseGroups,
     setupConsoleHooks,
     formattableMethods: ['log', 'info', 'debug', 'warn', 'error', 'focus']
   })
 
-  GroupManager.bindEvents()
+  function performConsoleAction (action, args) {
+    return BrowserAdapter[action](...args)
+  }
 
   if (this.setupConsoleHooks) {
-    let performConsoleAction = function (action, args) {
-      GroupManager.clear()
-      return BrowserAdapter[action](...args)
-    }
-
-    console.log = function () {
-      performConsoleAction('log', arguments)
-    }
-    console.debug = function () {
-      performConsoleAction('debug', arguments)
-    }
-    console.info = function () {
-      performConsoleAction('info', arguments)
-    }
-    console.warn = function () {
-      performConsoleAction('warn', arguments)
-    }
-    console.error = function () {
-      performConsoleAction('error', arguments)
-    }
-    console.assert = function () {
-      performConsoleAction('assert', arguments)
-    }
-    console.clear = function () {
-      GroupManager.clear()
-    }
-    console.count = function () {
-      performConsoleAction('count', arguments)
-    }
-    console.dir = function () {
-      performConsoleAction('dir', arguments)
-    }
-    console.dirxml = function () {
-      performConsoleAction('dirxml', arguments)
-    }
-    console.group = function () {
-      performConsoleAction('group', arguments)
-    }
-    console.groupCollapsed = function () {
-      performConsoleAction('groupCollapsed', arguments)
-    }
-    console.groupEnd = function () {
-      performConsoleAction('groupEnd', arguments)
-    }
-    console.profile = function () {
-      performConsoleAction('profile', arguments)
-    }
-    console.profileEnd = function () {
-      performConsoleAction('profileEnd', arguments)
-    }
-    console.time = function () {
-      performConsoleAction('time', arguments)
-    }
-    console.timeEnd = function () {
-      performConsoleAction('timeEnd', arguments)
-    }
-    console.timeStamp = function () {
-      performConsoleAction('timeStamp', arguments)
-    }
-    console.trace = function () {
-      performConsoleAction('trace', arguments)
-    }
+    console.log = () => performConsoleAction('log', arguments)
+    console.debug = () => performConsoleAction('debug', arguments)
+    console.info = () => performConsoleAction('info', arguments)
+    console.warn = () => performConsoleAction('warn', arguments)
+    console.error = () => performConsoleAction('error', arguments)
+    console.assert = () => performConsoleAction('assert', arguments)
+    // console.clear = () => GroupManager.clear()
+    console.count = () => performConsoleAction('count', arguments)
+    console.dir = () => performConsoleAction('dir', arguments)
+    console.dirxml = () => performConsoleAction('dirxml', arguments)
+    console.group = () => performConsoleAction('group', arguments)
+    console.groupCollapsed = () => performConsoleAction('groupCollapsed', arguments)
+    console.groupEnd = () => performConsoleAction('groupEnd', arguments)
+    console.profile = () => performConsoleAction('profile', arguments)
+    console.profileEnd = () => performConsoleAction('profileEnd', arguments)
+    console.time = () => performConsoleAction('time', arguments)
+    console.timeEnd = () => performConsoleAction('timeEnd', arguments)
+    console.timeStamp = () => performConsoleAction('timeStamp', arguments)
+    console.trace = () => performConsoleAction('trace', arguments)
   }
 }
 
@@ -116,10 +72,10 @@ Logalize.prototype = {
     this.print('dirxml', obj)
   },
   profile (...args) {
-    var func = args.pop()
+    const func = args.pop()
     if (typeof func === 'function') {
       if (this._isEnabled()) BrowserAdapter.profile(args[0])
-      var returnValue = func()
+      const returnValue = func()
       this.profileEnd()
       return returnValue
     } else {
@@ -130,10 +86,10 @@ Logalize.prototype = {
     if (this._isEnabled()) BrowserAdapter.profileEnd()
   },
   time (...args) {
-    var func = args.pop()
+    const func = args.pop()
     if (typeof func === 'function') {
       if (this._isEnabled()) BrowserAdapter.time(args[0])
-      var returnValue = func()
+      const returnValue = func()
       this.timeEnd(args[0])
       return returnValue
     } else {
@@ -151,55 +107,39 @@ Logalize.prototype = {
   },
 
   group (...args) {
-    var groupMethod = this.collapseGroups ? 'groupCollapsed' : 'group'
-
-    if (typeof args[args.length - 1] === 'function') {
-      var func = args.pop()
-
-      if (this._isEnabled()) GroupManager.group(groupMethod, args, true)
-      var returnValue = func()
-      if (this._isEnabled()) GroupManager.ungroup(true)
-
+    const func = args.pop()
+    if (typeof func === 'function') {
+      if (this._isEnabled()) BrowserAdapter.group(...args)
+      const returnValue = func()
+      this.groupEnd()
       return returnValue
-    } else if (this._isEnabled()) {
-      GroupManager.group(groupMethod, args)
+    } else {
+      if (this._isEnabled()) BrowserAdapter.group(...args, func)
     }
-    return this
+  },
+  groupCollapsed (...args) {
+    const func = args.pop()
+    if (typeof func === 'function') {
+      if (this._isEnabled()) BrowserAdapter.groupCollapsed(...args)
+      const returnValue = func()
+      this.groupEnd()
+      return returnValue
+    } else {
+      if (this._isEnabled()) BrowserAdapter.groupCollapsed(...args, func)
+    }
+  },
+  groupEnd () {
+    if (this._isEnabled()) BrowserAdapter.groupEnd()
   },
 
   print (method, ...args) {
-    GroupManager.ungroup()
     if (!this._isEnabled()) return
-
-    var shouldGroupInline = !document.hasFocus() && (GroupManager.previousStack.length + GroupManager.globalStack.length)
-    if (shouldGroupInline) {
-      var groupArgs = []
-      var stack = GroupManager.previousStack
-      stack.unshift(...GroupManager.globalStack.reduce((a, b) => a.concat(b), []))
-      GroupManager.previousStack = []
-      for (let i in stack) {
-        groupArgs.push(stack[i])
-      }
-      // TODO improve this formatting
-      var groupString = groupArgs.join(' -> ') + ' :: '
-
-      if (typeof args[0] === 'string') {
-        args[0] = groupString + args[0]
-      } else {
-        args.unshift(groupString)
-      }
-    }
 
     if (this.formattableMethods.indexOf(method) > -1 && this.enableFormatting) {
       args = Formatter.format(args)
     }
 
-    if (shouldGroupInline) {
-      BrowserAdapter.groupCollapsed(...args)
-      BrowserAdapter.groupEnd()
-    } else {
-      BrowserAdapter[method](...args)
-    }
+    BrowserAdapter[method](...args)
   },
 
   // Enable / disable
