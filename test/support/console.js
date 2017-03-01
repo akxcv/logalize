@@ -72,7 +72,7 @@ module.exports = {
   groupEnd () {
     console.groupEnds += 1
   },
-  _clearArrays () {
+  _clear () {
     console.logs = []
     console.debugs = []
     console.infos = []

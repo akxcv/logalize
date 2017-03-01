@@ -12,6 +12,7 @@ Object.assign(Logalize, {
     this.configure()
     this.previousNamespace = new Namespace()
     this.currentNamespace = new Namespace()
+    this.clojureNamespace = new Namespace()
   },
   configure ({
     enabled = true,
@@ -62,7 +63,28 @@ Object.assign(Logalize, {
   },
 
   namespace (...args) {
-    this.currentNamespace = new Namespace(...this.currentNamespace.stack, ...args)
+    const func = args.pop()
+    if (typeof func === 'function') {
+      if (this._isEnabled()) {
+        var oldClojureNamespace = this.clojureNamespace
+        this.clojureNamespace = new Namespace(
+          ...oldClojureNamespace.stack,
+          ...args
+        )
+      }
+      const returnValue = func()
+      if (this._isEnabled()) {
+        this.previousNamespace.transitionInto(oldClojureNamespace)
+        this.clojureNamespace = oldClojureNamespace
+      }
+      return returnValue
+    } else if (this._isEnabled()) {
+      this.currentNamespace = new Namespace(
+        ...this.currentNamespace.stack,
+        ...args,
+        func
+      )
+    }
     return this
   },
 
@@ -99,7 +121,7 @@ Object.assign(Logalize, {
     if (typeof func === 'function') {
       if (this._isEnabled()) BrowserAdapter.profile(args[0])
       const returnValue = func()
-      this.profileEnd()
+      if (this._isEnabled()) this.profileEnd()
       return returnValue
     } else {
       if (this._isEnabled()) BrowserAdapter.profile(args[0])
@@ -113,7 +135,7 @@ Object.assign(Logalize, {
     if (typeof func === 'function') {
       if (this._isEnabled()) BrowserAdapter.time(args[0])
       const returnValue = func()
-      this.timeEnd(args[0])
+      if (this._isEnabled()) this.timeEnd(args[0])
       return returnValue
     } else {
       if (this._isEnabled()) BrowserAdapter.time(args[0])
@@ -134,7 +156,7 @@ Object.assign(Logalize, {
     if (typeof func === 'function') {
       if (this._isEnabled()) BrowserAdapter.group(...args)
       const returnValue = func()
-      this.groupEnd()
+      if (this._isEnabled()) this.groupEnd()
       return returnValue
     } else {
       if (this._isEnabled()) BrowserAdapter.group(...args, func)
@@ -145,7 +167,7 @@ Object.assign(Logalize, {
     if (typeof func === 'function') {
       if (this._isEnabled()) BrowserAdapter.groupCollapsed(...args)
       const returnValue = func()
-      this.groupEnd()
+      if (this._isEnabled()) this.groupEnd()
       return returnValue
     } else {
       if (this._isEnabled()) BrowserAdapter.groupCollapsed(...args, func)
@@ -162,13 +184,14 @@ Object.assign(Logalize, {
       args = Formatter.format(args)
     }
 
-    if (compareArrays(this.previousNamespace.stack, this.currentNamespace.stack)) {
+    const combinedStack = this.clojureNamespace.stack.concat(this.currentNamespace.stack)
+    if (compareArrays(this.previousNamespace.stack, combinedStack)) {
       BrowserAdapter[method](...args)
     } else {
-      this.previousNamespace.transitionInto(this.currentNamespace)
-      this.currentNamespace.print(method, ...args)
+      this.previousNamespace.transitionInto(this.clojureNamespace, this.currentNamespace)
+      BrowserAdapter[method](...args)
+      // this.currentNamespace.print(method, ...args)
     }
-    this.previousNamespace = this.currentNamespace
     this.currentNamespace = new Namespace()
   },
 

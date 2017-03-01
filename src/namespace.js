@@ -9,17 +9,20 @@ class Namespace {
     BrowserAdapter[method](...args)
   }
 
-  transitionInto (namespace) {
+  transitionInto (...namespaces) {
+    var newStack = []
+    for (let ns of namespaces) newStack.push(...ns.stack)
     var commonSize = 0
 
     for (let [i, val] of this.stack.entries()) {
-      if (val === namespace.stack[i]) commonSize += 1
+      if (val === newStack[i]) commonSize += 1
     }
     const deleteSize = this.stack.length - commonSize
 
     for (let i = 0; i < deleteSize; i++) BrowserAdapter.groupEnd()
-    const toAdd = namespace.stack.slice(commonSize)
+    const toAdd = newStack.slice(commonSize)
     for (let n of toAdd) BrowserAdapter.group(n)
+    this.stack = newStack
   }
 
   close () {

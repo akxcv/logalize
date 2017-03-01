@@ -10,7 +10,8 @@ beforeAll(function () {
 })
 
 beforeEach(function () {
-  console._clearArrays()
+  logalize._clear()
+  console._clear()
   global.localStorage = {
     setItem: function (key, value) { this[key] = value },
     getItem: function (key) { return this[key] }
