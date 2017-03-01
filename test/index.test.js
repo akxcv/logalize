@@ -6,7 +6,7 @@ beforeAll(function () {
   document.hasFocus = () => true
   console = require('./support/console')
   logalize = require('./support/logalize')
-  logalize.configure()
+  logalize.init()
 })
 
 beforeEach(function () {

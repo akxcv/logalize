@@ -1,11 +1,18 @@
 import BrowserAdapter from './browserAdapter'
 import Formatter from './formatter'
+import Namespace from './namespace'
+import { compareArrays } from './utils'
 
 function Logalize (...args) {
   Logalize.print('log', ...args)
 }
 
 Object.assign(Logalize, {
+  init () {
+    this.configure()
+    this.previousNamespace = new Namespace()
+    this.currentNamespace = new Namespace()
+  },
   configure ({
     enabled = true,
     enableFormatting = true,
@@ -18,7 +25,11 @@ Object.assign(Logalize, {
       formattableMethods: ['log', 'info', 'debug', 'warn', 'error', 'focus']
     })
 
+    // dirty, i know
+    const self = this
     function performConsoleAction (action, args) {
+      self.previousNamespace.close()
+      self.previousNamespace = new Namespace()
       return BrowserAdapter[action](...args)
     }
 
@@ -29,7 +40,6 @@ Object.assign(Logalize, {
       console.warn           = function () { performConsoleAction('warn', arguments) }
       console.error          = function () { performConsoleAction('error', arguments) }
       console.assert         = function () { performConsoleAction('assert', arguments) }
-      // console.clear       = function () { GroupManager.clear() }
       console.count          = function () { performConsoleAction('count', arguments) }
       console.dir            = function () { performConsoleAction('dir', arguments) }
       console.dirxml         = function () { performConsoleAction('dirxml', arguments) }
@@ -42,8 +52,17 @@ Object.assign(Logalize, {
       console.timeEnd        = function () { performConsoleAction('timeEnd', arguments) }
       console.timeStamp      = function () { performConsoleAction('timeStamp', arguments) }
       console.trace          = function () { performConsoleAction('trace', arguments) }
+      console.clear          = function () {
+        self.previousNamespace = new Namespace()
+        BrowserAdapter.clear()
+      }
     }
 
+    return this
+  },
+
+  namespace (...args) {
+    this.currentNamespace = new Namespace(...this.currentNamespace.stack, ...args)
     return this
   },
 
@@ -143,7 +162,14 @@ Object.assign(Logalize, {
       args = Formatter.format(args)
     }
 
-    BrowserAdapter[method](...args)
+    if (compareArrays(this.previousNamespace.stack, this.currentNamespace.stack)) {
+      BrowserAdapter[method](...args)
+    } else {
+      this.previousNamespace.transitionInto(this.currentNamespace)
+      this.currentNamespace.print(method, ...args)
+    }
+    this.previousNamespace = this.currentNamespace
+    this.currentNamespace = new Namespace()
   },
 
   // Enable / disable

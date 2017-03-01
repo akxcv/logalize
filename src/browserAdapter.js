@@ -12,6 +12,7 @@ const BrowserAdapter = {
   // Misc
   assert: console.assert,
   count: console.count,
+  clear: console.clear,
   dir: console.dir,
   dirxml: console.dirxml,
   profile: console.profile,

@@ -1,3 +1,3 @@
 import Logalize from './'
 window.logalize = Logalize
-window.logalize.configure()
+window.logalize.init()
