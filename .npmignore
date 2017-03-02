@@ -1,4 +1,6 @@
 .babelrc
+.eslintignore
+.eslint.json
 .gitignore
 .npmignore
 
@@ -8,3 +10,4 @@ test
 
 app.js
 index.scss
+webpack.config.babel.js
