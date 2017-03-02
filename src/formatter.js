@@ -70,7 +70,6 @@ const Formatter = {
     var div = document.createElement('div')
     div.id = 'logalize'
     div.className = classes
-    div.style = 'display: none;'
 
     // Append the div to the DOM and compute styles
     document.getElementsByTagName('body')[0].appendChild(div)
