@@ -15,7 +15,7 @@ beforeEach(function () {
   logalize.configure({ enabled: true, enableFormatting: false })
 })
 
-it('logs into a namespace', function() {
+it('logs into a namespace', function () {
   logalize.namespace('kukareku').log('preved')
   expect(console.logs.length).toBe(1)
   expect(console.logs[0]).toEqual({

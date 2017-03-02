@@ -6,7 +6,7 @@ function compareArrays (array1, array2) {
   for (let [i, val] of array1.entries()) {
     if (val instanceof Array && array2[i] instanceof Array) {
       if (!compareArrays(val, array2[i])) return false
-    } else if (val != array2[i]) {
+    } else if (val !== array2[i]) {
       return false
     }
   }

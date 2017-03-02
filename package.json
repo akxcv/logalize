@@ -14,11 +14,18 @@
   "main": "src/index.js",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "webpack -p && node-sass index.scss dist/logalize.css",
+    "build": "node-sass index.scss src/index.css && webpack -p",
     "lint": "eslint src/*.js test/*.js",
+    "lint-staged": "lint-staged",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch"
   },
+  "lint-staged": {
+    "*.js": "eslint"
+  },
+  "pre-commit": [
+    "lint-staged"
+  ],
   "author": "Alexander Komarov <ak@akxcv.com> (http://akxcv.com)",
   "license": "MIT",
   "repository": "akxcv/logalize",
@@ -29,6 +36,7 @@
     "babel-loader": "^6.3.2",
     "babel-preset-env": "^1.1.8",
     "babel-preset-es2015": "^6.22.0",
+    "css-loader": "^0.26.2",
     "eslint": "^3.15.0",
     "eslint-config-standard": "^6.2.1",
     "eslint-plugin-es5": "^1.0.1",
@@ -36,20 +44,12 @@
     "eslint-plugin-standard": "^2.0.1",
     "jest": "^18.1.0",
     "jest-cli": "^18.1.0",
+    "lint-staged": "^3.3.1",
     "node-sass": "^4.5.0",
+    "pre-commit": "^1.2.2",
     "rimraf": "^2.6.0",
     "uglifyjs": "^2.4.10",
     "webpack": "^2.2.1"
-  },
-  "eslintConfig": {
-    "extends": "eslint-config-standard",
-    "rules": {
-      "no-multi-spaces": 0
-    },
-    "env": {
-      "browser": true,
-      "jest": true
-    }
   },
   "jest": {
     "collectCoverageFrom": [

@@ -37,7 +37,7 @@ it('produces output with multiple arguments', function () {
   expect(console.logs.length).toBe(2)
   expect(console.logs).toEqual([
     ['hello', 1, null, { id: 1 }],
-    ['hello', 'world'],
+    ['hello', 'world']
   ])
 })
 
@@ -184,9 +184,7 @@ test('timeStamp', function () {
 
 test('trace', function () {
   logalize.trace('arg1', 'arg2')
-  expect(console.traces).toEqual([
-    'arg1',
-  ])
+  expect(console.traces).toEqual(['arg1'])
 })
 
 test('group', function () {
@@ -237,12 +235,12 @@ test('groupCollapsed', function () {
 
 describe('enable/disable', function () {
   it('inherits init settings', function () {
-    expect(logalize.configure({ enabled: true  })._isEnabled()).toBe(true)
+    expect(logalize.configure({ enabled: true })._isEnabled()).toBe(true)
     expect(logalize.configure({ enabled: false })._isEnabled()).toBe(false)
   })
 
   it('prefers clientside settings', function () {
-    logalize.configure({ enabled: true  }).disable()
+    logalize.configure({ enabled: true }).disable()
     expect(logalize._isEnabled()).toBe(false)
 
     logalize.configure({ enabled: false }).enable()

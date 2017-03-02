@@ -1,7 +1,6 @@
 import BrowserAdapter from './browserAdapter'
 import Formatter from './formatter'
 import NamespaceManager from './namespaceManager'
-import { compareArrays } from './utils'
 
 function Logalize (...args) {
   Logalize.print('log', ...args)

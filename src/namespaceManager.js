@@ -15,10 +15,10 @@ const NamespaceManager = {
       const returnValue = func()
       if (this.loggingEnabled) {
         const currentClojure = this.clojureStack.pop()
-        for (let i in currentClojure) {
+        currentClojure.forEach(() => {
           this.previousStack.pop()
           BrowserAdapter.groupEnd()
-        }
+        })
       }
       return returnValue
     } else if (this.loggingEnabled) {
@@ -48,7 +48,7 @@ const NamespaceManager = {
     this.currentStack = []
   },
   clear () {
-    for (let n in [...this.clojureStack, ...this.currentStack]) BrowserAdapter.groupEnd()
+    [...this.clojureStack, ...this.currentStack].forEach(() => BrowserAdapter.groupEnd())
     this.previousStack = []
   },
   _groupingMethod () {
