@@ -1,4 +1,4 @@
-var BrowserAdapter = {
+const BrowserAdapter = {
   // Basic logging
   log: console.log,
   debug: console.debug,
@@ -12,6 +12,7 @@ var BrowserAdapter = {
   // Misc
   assert: console.assert,
   count: console.count,
+  clear: console.clear,
   dir: console.dir,
   dirxml: console.dirxml,
   profile: console.profile,
@@ -22,4 +23,4 @@ var BrowserAdapter = {
   trace: console.trace
 }
 
-module.exports = BrowserAdapter
+export default BrowserAdapter
