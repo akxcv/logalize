@@ -1,6 +1,6 @@
 import BrowserAdapter from './browserAdapter'
 import Formatter from './formatter'
-import Namespace from './namespace'
+import NamespaceManager from './namespaceManager'
 import { compareArrays } from './utils'
 
 function Logalize (...args) {
@@ -10,9 +10,6 @@ function Logalize (...args) {
 Object.assign(Logalize, {
   init () {
     this.configure()
-    this.previousNamespace = new Namespace()
-    this.currentNamespace = new Namespace()
-    this.clojureNamespace = new Namespace()
   },
   configure ({
     enabled = true,
@@ -26,10 +23,8 @@ Object.assign(Logalize, {
       formattableMethods: ['log', 'info', 'debug', 'warn', 'error', 'focus']
     })
 
-    const self = this
     function performConsoleAction (action, args) {
-      self.previousNamespace.close()
-      self.previousNamespace = new Namespace()
+      NamespaceManager.clear()
       return BrowserAdapter[action](...args)
     }
 
@@ -52,38 +47,20 @@ Object.assign(Logalize, {
       console.timeEnd        = function () { performConsoleAction('timeEnd', arguments) }
       console.timeStamp      = function () { performConsoleAction('timeStamp', arguments) }
       console.trace          = function () { performConsoleAction('trace', arguments) }
-      console.clear          = function () {
-        self.previousNamespace = new Namespace()
-        BrowserAdapter.clear()
-      }
+      console.clear          = function () { performConsoleAction('clear', arguments) }
     }
+
+    NamespaceManager.configure({
+      loggingEnabled: this._isEnabled(),
+      collapsed: this.collapseNamespaces
+    })
 
     return this
   },
 
   namespace (...args) {
-    const func = args.pop()
-    if (typeof func === 'function') {
-      if (this._isEnabled()) {
-        var oldClojureNamespace = this.clojureNamespace
-        this.clojureNamespace = new Namespace(
-          ...oldClojureNamespace.stack,
-          ...args
-        )
-      }
-      const returnValue = func()
-      if (this._isEnabled()) {
-        this.clojureNamespace = oldClojureNamespace
-      }
-      return returnValue
-    } else if (this._isEnabled()) {
-      this.currentNamespace = new Namespace(
-        ...this.currentNamespace.stack,
-        ...args,
-        func
-      )
-    }
-    return this
+    const returnValue = NamespaceManager.setNamespace(...args)
+    return typeof args[args.length - 1] === 'function' ? returnValue : this
   },
 
   log () {
@@ -182,23 +159,19 @@ Object.assign(Logalize, {
       args = Formatter.format(args)
     }
 
-    const combinedStack = this.clojureNamespace.stack.concat(this.currentNamespace.stack)
-    if (compareArrays(this.previousNamespace.stack, combinedStack)) {
-      BrowserAdapter[method](...args)
-    } else {
-      this.previousNamespace.transitionInto(this.clojureNamespace, this.currentNamespace)
-      BrowserAdapter[method](...args)
-    }
-    this.currentNamespace = new Namespace()
+    NamespaceManager.group()
+    BrowserAdapter[method](...args)
   },
 
   // Enable / disable
 
   enable () {
     if (localStorage) localStorage.setItem('logalizeEnabled', 'true')
+    NamespaceManager.configure({ loggingEnabled: this._isEnabled() })
   },
   disable () {
     if (localStorage) localStorage.setItem('logalizeEnabled', 'false')
+    NamespaceManager.configure({ loggingEnabled: this._isEnabled() })
   },
 
   // Private

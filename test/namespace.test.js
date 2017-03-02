@@ -15,10 +15,6 @@ beforeEach(function () {
   logalize.configure({ enabled: true, enableFormatting: false })
 })
 
-it('creates one by default', function () {
-  expect(logalize.currentNamespace.stack).toEqual([])
-})
-
 it('logs into a namespace', function() {
   logalize.namespace('kukareku').log('preved')
   expect(console.logs.length).toBe(1)
@@ -52,6 +48,22 @@ it('is opening/closing a minimal amount of groups', function () {
   })
   expect(console.groupStarts).toBe(3)
   expect(console.groupEnds).toBe(2)
+
+  logalize.namespace(3, 4, 5).log('hi from 3, 4, 5')
+  expect(console.logs[3]).toEqual({
+    args: ['hi from 3, 4, 5'],
+    groupStack: [[3], [4], [5]]
+  })
+  expect(console.groupStarts).toBe(5)
+  expect(console.groupEnds).toBe(2)
+
+  logalize.namespace(3, 6, 5).log('hi from 3, 6, 5')
+  expect(console.logs[4]).toEqual({
+    args: ['hi from 3, 6, 5'],
+    groupStack: [[3], [6], [5]]
+  })
+  expect(console.groupStarts).toBe(7)
+  expect(console.groupEnds).toBe(4)
 })
 
 it('supports clojure syntax', function () {

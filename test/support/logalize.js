@@ -1,7 +1,10 @@
 import Logalize from '../../src/'
+import NamespaceManager from '../../src/namespaceManager'
 
 Logalize._clear = function () {
-  console.log('clearing')
+  NamespaceManager.clojureStack = []
+  NamespaceManager.currentStack = []
+  NamespaceManager.previousStack = []
 }
 
 module.exports = Logalize
