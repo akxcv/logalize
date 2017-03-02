@@ -48,6 +48,26 @@ Object.assign(Logalize, {
       console.timeStamp      = function () { performConsoleAction('timeStamp', arguments) }
       console.trace          = function () { performConsoleAction('trace', arguments) }
       console.clear          = function () { performConsoleAction('clear', arguments) }
+    } else {
+      console.log            = BrowserAdapter.log
+      console.debug          = BrowserAdapter.debug
+      console.info           = BrowserAdapter.info
+      console.warn           = BrowserAdapter.warn
+      console.error          = BrowserAdapter.error
+      console.assert         = BrowserAdapter.assert
+      console.count          = BrowserAdapter.count
+      console.dir            = BrowserAdapter.dir
+      console.dirxml         = BrowserAdapter.dirxml
+      console.group          = BrowserAdapter.group
+      console.groupCollapsed = BrowserAdapter.groupCollapsed
+      console.groupEnd       = BrowserAdapter.groupEnd
+      console.profile        = BrowserAdapter.profile
+      console.profileEnd     = BrowserAdapter.profileEnd
+      console.time           = BrowserAdapter.time
+      console.timeEnd        = BrowserAdapter.timeEnd
+      console.timeStamp      = BrowserAdapter.timeStamp
+      console.trace          = BrowserAdapter.trace
+      console.clear          = BrowserAdapter.clear
     }
 
     NamespaceManager.configure({
