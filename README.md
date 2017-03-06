@@ -10,10 +10,6 @@ Logalize is a Javascript wrapper for browser's developer console.
 - [Namespaces](#namespaces).
 - [Markdown-like formatting](#formatting).
 
-## Browser support
-
-TBD
-
 ## Usage
 
 Enable or disable logging:
@@ -107,9 +103,9 @@ You can easily mix methods together and nest namespaces however you want:
 ```js
 logalize.namespace('user login', function () {
   logalize.info('user login started')
-  logalize.namespace('credentials').log('credentials are [correct].green')
+  logalize.namespace('credentials').log('credentials are {correct}.green')
   /* code */
-  logalize.info('[success].badge.green')
+  logalize.info('[success].green')
 })
 
 logalize.namespace('namespace 1').log('some more output')
@@ -127,8 +123,9 @@ Logalize supports Markdown-like string formatting. Here's the options:
 - `*italic*`
 - `~strikethrough~`
 - `_underline_`
-- `[custom text].classOne.classTwo...`. This syntax allows you to apply CSS classes to text in
-square brackets. Available classes are: `badge`, `bold`, `italic`, `strikethrough`, `underline` and [color classes](#color-classes).
+- `[badge text].classOne.classTwo...` (classes are optional)
+- `{custom text}.classOne.classTwo...` (classes are required). This syntax allows you to apply CSS
+classes to text in curly braces. Available classes are: `badge`, `bold`, `italic`, `strikethrough`, `underline` and [color classes](#color-classes).
 
 At the moment, you cannot nest formatting options into each other.
 Objects and functions are not formattable, but they likely will be in the future.
@@ -179,8 +176,5 @@ The package is available as open source under the terms of the [MIT License](htt
 
 - Support nested formatting
 - Log history
-- Replace stylesheet with in-memory CSS?
-- Focus mode (see only the logs you need **right now**)
-- Custom styles in formatting (e.x. `[my text]{color: #434433;}`)
-- Browser support
+- Focus mode (see only the logs you need *right now*)
 - Object and function formatting

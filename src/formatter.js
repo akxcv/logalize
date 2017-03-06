@@ -80,6 +80,8 @@ const Formatter = {
       styles.push(`${s}:${computedStyle.getPropertyValue(s)}`)
     }
 
+    div.remove()
+
     return styles.join(';')
   },
 
@@ -104,9 +106,17 @@ const Formatter = {
       regex: /_([^_]+)_/,
       classes: 'underline'
     }, {
+      // [badge]
+      regex: /\[([^\[\]]+)\](\.[\.\w]+)?/,
+      classes: function badgeClasses (match) {
+        var classes = 'badge'
+        if (match[2]) classes += match[2] && match[2].split('.').join(' ')
+        return classes
+      }
+    }, {
       // custom
       // [my text].class1.class2
-      regex: /\[([^\[\]]+)\](\.[\.\w]+)/,
+      regex: /\{([^\{\}]+)\}(\.[\.\w]+)/,
       classes: (match) => match[2].split('.').join(' ')
     }
   ]

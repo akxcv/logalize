@@ -9,9 +9,11 @@ it('formats strings', function () {
     '%cstrikethrough%c and %citalic%c',
     ['strikethrough', 'default', 'italic', 'default']
   ])
-  expect(Formatter.formatString('_underline_ and [custom].classOne.classTwo')).toEqual([
-    '%cunderline%c and %ccustom%c',
-    ['underline', 'default', ' classOne classTwo', 'default']
+  expect(Formatter.formatString(
+    '_underline_ and [mybadge] and {custom}.classOne.classTwo and [mybadge2].green'
+  )).toEqual([
+    '%cunderline%c and %cmybadge%c and %ccustom%c and %cmybadge2%c',
+    ['underline', 'default', 'badge', 'default', ' classOne classTwo', 'default', 'badge green', 'default']
   ])
 })
 
