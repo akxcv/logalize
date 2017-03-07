@@ -17,11 +17,14 @@
     "build": "node-sass index.scss src/index.css && webpack -p",
     "lint": "eslint src/*.js test/*.js",
     "lint-staged": "lint-staged",
-    "test": "jest --coverage",
-    "test:watch": "jest --coverage --watch"
+    "spellcheck": "yaspeller-ci *.md",
+    "test": "yarn test:unit && yarn lint && yarn spellcheck",
+    "test:unit": "jest --coverage",
+    "test:watch": "yarn test:unit -- --watch"
   },
   "lint-staged": {
-    "*.js": "eslint"
+    "*.js": "eslint",
+    "*.md": "yaspeller-ci"
   },
   "pre-commit": [
     "lint-staged"
@@ -49,7 +52,8 @@
     "pre-commit": "^1.2.2",
     "rimraf": "^2.6.0",
     "uglifyjs": "^2.4.10",
-    "webpack": "^2.2.1"
+    "webpack": "^2.2.1",
+    "yaspeller-ci": "^0.3.0"
   },
   "jest": {
     "collectCoverageFrom": [

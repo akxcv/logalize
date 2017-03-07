@@ -1,6 +1,6 @@
 # Logalize
 
-Logalize is a Javascript wrapper for browser's developer console.
+Logalize is a JavaScript wrapper for browser's developer console.
 
 [Rails gem](https://github.com/akxcv/logalize-rails)
 
