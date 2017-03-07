@@ -147,7 +147,8 @@ test('profile', function () {
   expect(console.profileEnds).toBe(1)
   expect(ret3).toBe('str')
 
-  logalize.configure({ enabled: true }).profileEnd()
+  logalize.configure({ enabled: true })
+  logalize.profileEnd()
   expect(console.profileEnds).toBe(2)
 })
 
@@ -171,7 +172,8 @@ test('time', function () {
   expect(console.timeEnds.length).toBe(1)
   expect(ret3).toBe('str')
 
-  logalize.configure({ enabled: true }).timeEnd('hello1')
+  logalize.configure({ enabled: true })
+  logalize.timeEnd('hello1')
   expect(console.timeEnds.length).toBe(2)
   expect(console.timeEnds[1]).toEqual(['hello1'])
 })
@@ -206,7 +208,8 @@ test('group', function () {
   expect(console.groupEnds).toBe(1)
   expect(ret3).toBe('str')
 
-  logalize.configure({ enabled: true }).groupEnd()
+  logalize.configure({ enabled: true })
+  logalize.groupEnd()
   expect(console.groupEnds).toBe(2)
 })
 
@@ -229,21 +232,44 @@ test('groupCollapsed', function () {
   expect(console.groupEnds).toBe(1)
   expect(ret3).toBe('str')
 
-  logalize.configure({ enabled: true }).groupEnd()
+  logalize.configure({ enabled: true })
+  logalize.groupEnd()
   expect(console.groupEnds).toBe(2)
 })
 
 describe('enable/disable', function () {
   it('inherits init settings', function () {
-    expect(logalize.configure({ enabled: true })._isEnabled()).toBe(true)
-    expect(logalize.configure({ enabled: false })._isEnabled()).toBe(false)
+    logalize.configure({ enabled: true })
+    expect(logalize.isEnabled()).toBe(true)
+    logalize.configure({ enabled: false })
+    expect(logalize.isEnabled()).toBe(false)
   })
 
   it('prefers clientside settings', function () {
-    logalize.configure({ enabled: true }).disable()
-    expect(logalize._isEnabled()).toBe(false)
+    logalize.configure({ enabled: true })
+    logalize.disable()
+    expect(logalize.isEnabled()).toBe(false)
 
-    logalize.configure({ enabled: false }).enable()
-    expect(logalize._isEnabled()).toBe(true)
+    logalize.configure({ enabled: false })
+    logalize.enable()
+    expect(logalize.isEnabled()).toBe(true)
+  })
+
+  it('still returns values when disabled', function () {
+    expect(logalize.namespace('ns', () => 1))
+    expect(logalize.profile('prof', () => 1))
+    expect(logalize.group('group1', () => 1))
+    expect(logalize.time('time001', () => 1))
+  })
+})
+
+describe('configure', function () {
+  it('clears namespaces', function () {
+    logalize.namespace('hi').log('whatever')
+    logalize.configure({ collapseNamespaces: true })
+    logalize.namespace('hi').log('hello')
+    expect(console.collapsedGroups.length).toBe(1)
+    expect(console.groups.length).toBe(1)
+    expect(console.groupEnds).toBe(1)
   })
 })

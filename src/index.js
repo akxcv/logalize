@@ -13,68 +13,27 @@ Object.assign(Logalize, {
   configure ({
     enabled = true,
     enableFormatting = true,
-    setupConsoleHooks = true
+    enableConsoleHooks = true,
+    collapseNamespaces = false
   } = {}) {
     Object.assign(this, {
       enabled,
       enableFormatting,
-      setupConsoleHooks,
+      enableConsoleHooks,
+      collapseNamespaces,
       formattableMethods: ['log', 'info', 'debug', 'warn', 'error', 'focus']
     })
 
-    function performConsoleAction (action, args) {
-      NamespaceManager.clear()
-      return BrowserAdapter[action](...args)
-    }
-
-    if (this.setupConsoleHooks) {
-      console.log            = function () { performConsoleAction('log', arguments) }
-      console.debug          = function () { performConsoleAction('debug', arguments) }
-      console.info           = function () { performConsoleAction('info', arguments) }
-      console.warn           = function () { performConsoleAction('warn', arguments) }
-      console.error          = function () { performConsoleAction('error', arguments) }
-      console.assert         = function () { performConsoleAction('assert', arguments) }
-      console.count          = function () { performConsoleAction('count', arguments) }
-      console.dir            = function () { performConsoleAction('dir', arguments) }
-      console.dirxml         = function () { performConsoleAction('dirxml', arguments) }
-      console.group          = function () { performConsoleAction('group', arguments) }
-      console.groupCollapsed = function () { performConsoleAction('groupCollapsed', arguments) }
-      console.groupEnd       = function () { performConsoleAction('groupEnd', arguments) }
-      console.profile        = function () { performConsoleAction('profile', arguments) }
-      console.profileEnd     = function () { performConsoleAction('profileEnd', arguments) }
-      console.time           = function () { performConsoleAction('time', arguments) }
-      console.timeEnd        = function () { performConsoleAction('timeEnd', arguments) }
-      console.timeStamp      = function () { performConsoleAction('timeStamp', arguments) }
-      console.trace          = function () { performConsoleAction('trace', arguments) }
-      console.clear          = function () { performConsoleAction('clear', arguments) }
+    if (this.enableConsoleHooks) {
+      this.setupConsoleHooks()
     } else {
-      console.log            = BrowserAdapter.log
-      console.debug          = BrowserAdapter.debug
-      console.info           = BrowserAdapter.info
-      console.warn           = BrowserAdapter.warn
-      console.error          = BrowserAdapter.error
-      console.assert         = BrowserAdapter.assert
-      console.count          = BrowserAdapter.count
-      console.dir            = BrowserAdapter.dir
-      console.dirxml         = BrowserAdapter.dirxml
-      console.group          = BrowserAdapter.group
-      console.groupCollapsed = BrowserAdapter.groupCollapsed
-      console.groupEnd       = BrowserAdapter.groupEnd
-      console.profile        = BrowserAdapter.profile
-      console.profileEnd     = BrowserAdapter.profileEnd
-      console.time           = BrowserAdapter.time
-      console.timeEnd        = BrowserAdapter.timeEnd
-      console.timeStamp      = BrowserAdapter.timeStamp
-      console.trace          = BrowserAdapter.trace
-      console.clear          = BrowserAdapter.clear
+      this.removeConsoleHooks()
     }
 
     NamespaceManager.configure({
-      loggingEnabled: this._isEnabled(),
+      loggingEnabled: this.isEnabled(),
       collapsed: this.collapseNamespaces
     })
-
-    return this
   },
 
   namespace (...args) {
@@ -113,33 +72,33 @@ Object.assign(Logalize, {
   profile (...args) {
     const func = args.pop()
     if (typeof func === 'function') {
-      if (this._isEnabled()) BrowserAdapter.profile(args[0])
+      if (this.isEnabled()) BrowserAdapter.profile(args[0])
       const returnValue = func()
-      if (this._isEnabled()) this.profileEnd()
+      if (this.isEnabled()) this.profileEnd()
       return returnValue
     } else {
-      if (this._isEnabled()) BrowserAdapter.profile(args[0])
+      if (this.isEnabled()) BrowserAdapter.profile(args[0])
     }
   },
   profileEnd () {
-    if (this._isEnabled()) BrowserAdapter.profileEnd()
+    if (this.isEnabled()) BrowserAdapter.profileEnd()
   },
   time (...args) {
     const func = args.pop()
     if (typeof func === 'function') {
-      if (this._isEnabled()) BrowserAdapter.time(args[0])
+      if (this.isEnabled()) BrowserAdapter.time(args[0])
       const returnValue = func()
-      if (this._isEnabled()) this.timeEnd(args[0])
+      if (this.isEnabled()) this.timeEnd(args[0])
       return returnValue
     } else {
-      if (this._isEnabled()) BrowserAdapter.time(args[0])
+      if (this.isEnabled()) BrowserAdapter.time(args[0])
     }
   },
   timeEnd (label) {
-    if (this._isEnabled()) BrowserAdapter.timeEnd(label)
+    if (this.isEnabled()) BrowserAdapter.timeEnd(label)
   },
   timeStamp (label) {
-    if (this._isEnabled()) BrowserAdapter.timeStamp(label)
+    if (this.isEnabled()) BrowserAdapter.timeStamp(label)
   },
   trace (obj) {
     this.print('trace', obj)
@@ -148,31 +107,31 @@ Object.assign(Logalize, {
   group (...args) {
     const func = args.pop()
     if (typeof func === 'function') {
-      if (this._isEnabled()) BrowserAdapter.group(...args)
+      if (this.isEnabled()) BrowserAdapter.group(...args)
       const returnValue = func()
-      if (this._isEnabled()) this.groupEnd()
+      if (this.isEnabled()) this.groupEnd()
       return returnValue
     } else {
-      if (this._isEnabled()) BrowserAdapter.group(...args, func)
+      if (this.isEnabled()) BrowserAdapter.group(...args, func)
     }
   },
   groupCollapsed (...args) {
     const func = args.pop()
     if (typeof func === 'function') {
-      if (this._isEnabled()) BrowserAdapter.groupCollapsed(...args)
+      if (this.isEnabled()) BrowserAdapter.groupCollapsed(...args)
       const returnValue = func()
-      if (this._isEnabled()) this.groupEnd()
+      if (this.isEnabled()) this.groupEnd()
       return returnValue
     } else {
-      if (this._isEnabled()) BrowserAdapter.groupCollapsed(...args, func)
+      if (this.isEnabled()) BrowserAdapter.groupCollapsed(...args, func)
     }
   },
   groupEnd () {
-    if (this._isEnabled()) BrowserAdapter.groupEnd()
+    if (this.isEnabled()) BrowserAdapter.groupEnd()
   },
 
   print (method, ...args) {
-    if (!this._isEnabled()) return
+    if (!this.isEnabled()) return
 
     if (this.formattableMethods.indexOf(method) > -1 && this.enableFormatting) {
       args = Formatter.format(args)
@@ -186,21 +145,71 @@ Object.assign(Logalize, {
 
   enable () {
     if (localStorage) localStorage.setItem('logalizeEnabled', 'true')
-    NamespaceManager.configure({ loggingEnabled: this._isEnabled() })
+    NamespaceManager.configure({ loggingEnabled: this.isEnabled() })
   },
   disable () {
     if (localStorage) localStorage.setItem('logalizeEnabled', 'false')
-    NamespaceManager.configure({ loggingEnabled: this._isEnabled() })
+    NamespaceManager.configure({ loggingEnabled: this.isEnabled() })
   },
 
   // Private
 
-  _isEnabled () {
+  isEnabled () {
     if (localStorage && localStorage.logalizeEnabled) {
       return localStorage.logalizeEnabled !== 'false'
     } else {
       return this.enabled
     }
+  },
+
+  setupConsoleHooks () {
+    const self = this
+    console.log            = function () { self.performConsoleAction('log', arguments) }
+    console.debug          = function () { self.performConsoleAction('debug', arguments) }
+    console.info           = function () { self.performConsoleAction('info', arguments) }
+    console.warn           = function () { self.performConsoleAction('warn', arguments) }
+    console.error          = function () { self.performConsoleAction('error', arguments) }
+    console.assert         = function () { self.performConsoleAction('assert', arguments) }
+    console.count          = function () { self.performConsoleAction('count', arguments) }
+    console.dir            = function () { self.performConsoleAction('dir', arguments) }
+    console.dirxml         = function () { self.performConsoleAction('dirxml', arguments) }
+    console.group          = function () { self.performConsoleAction('group', arguments) }
+    console.groupCollapsed = function () { self.performConsoleAction('groupCollapsed', arguments) }
+    console.groupEnd       = function () { self.performConsoleAction('groupEnd', arguments) }
+    console.profile        = function () { self.performConsoleAction('profile', arguments) }
+    console.profileEnd     = function () { self.performConsoleAction('profileEnd', arguments) }
+    console.time           = function () { self.performConsoleAction('time', arguments) }
+    console.timeEnd        = function () { self.performConsoleAction('timeEnd', arguments) }
+    console.timeStamp      = function () { self.performConsoleAction('timeStamp', arguments) }
+    console.trace          = function () { self.performConsoleAction('trace', arguments) }
+    console.clear          = function () { self.performConsoleAction('clear', arguments) }
+  },
+
+  removeConsoleHooks () {
+    console.log            = BrowserAdapter.log
+    console.debug          = BrowserAdapter.debug
+    console.info           = BrowserAdapter.info
+    console.warn           = BrowserAdapter.warn
+    console.error          = BrowserAdapter.error
+    console.assert         = BrowserAdapter.assert
+    console.count          = BrowserAdapter.count
+    console.dir            = BrowserAdapter.dir
+    console.dirxml         = BrowserAdapter.dirxml
+    console.group          = BrowserAdapter.group
+    console.groupCollapsed = BrowserAdapter.groupCollapsed
+    console.groupEnd       = BrowserAdapter.groupEnd
+    console.profile        = BrowserAdapter.profile
+    console.profileEnd     = BrowserAdapter.profileEnd
+    console.time           = BrowserAdapter.time
+    console.timeEnd        = BrowserAdapter.timeEnd
+    console.timeStamp      = BrowserAdapter.timeStamp
+    console.trace          = BrowserAdapter.trace
+    console.clear          = BrowserAdapter.clear
+  },
+
+  performConsoleAction (action, args) {
+    NamespaceManager.clear()
+    return BrowserAdapter[action](...args)
   }
 })
 

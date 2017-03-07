@@ -7,6 +7,8 @@ const NamespaceManager = {
   previousStack: [],
   configure (configObject) {
     Object.assign(this, configObject)
+    this.clear()
+    this.currentStack = []
   },
   setNamespace (...args) {
     if (typeof args[args.length - 1] === 'function') {
@@ -48,7 +50,11 @@ const NamespaceManager = {
     this.currentStack = []
   },
   clear () {
-    [...this.clojureStack, ...this.currentStack].forEach(() => BrowserAdapter.groupEnd())
+    [
+      ...this.clojureStack,
+      ...this.currentStack,
+      ...this.previousStack
+    ].forEach(() => BrowserAdapter.groupEnd())
     this.previousStack = []
   },
   _groupingMethod () {
