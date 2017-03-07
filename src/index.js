@@ -1,6 +1,7 @@
 import BrowserAdapter from './browserAdapter'
 import Formatter from './formatter'
 import NamespaceManager from './namespaceManager'
+import stylesheet from './index.css'
 
 function Logalize (...args) {
   Logalize.print('log', ...args)
@@ -23,6 +24,12 @@ Object.assign(Logalize, {
       collapseNamespaces,
       formattableMethods: ['log', 'info', 'debug', 'warn', 'error', 'focus']
     })
+
+    if (this.enableFormatting) {
+      this.appendStylesToDOM()
+    } else {
+      this.removeStylesFromDOM()
+    }
 
     if (this.enableConsoleHooks) {
       this.setupConsoleHooks()
@@ -210,6 +217,20 @@ Object.assign(Logalize, {
   performConsoleAction (action, args) {
     NamespaceManager.clear()
     return BrowserAdapter[action](...args)
+  },
+
+  appendStylesToDOM () {
+    if (document.getElementById('logalize-stylesheet')) return
+    var styleEl = document.createElement('style')
+    styleEl.id = 'logalize-stylesheet'
+    styleEl.innerHTML = stylesheet.toString()
+    document.head.insertBefore(styleEl, document.head.firstChild)
+  },
+
+  removeStylesFromDOM () {
+    const stylesheetEl = document.getElementById('logalize-stylesheet')
+    if (!stylesheetEl) return
+    stylesheetEl.remove()
   }
 })
 

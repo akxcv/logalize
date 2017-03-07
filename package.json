@@ -62,6 +62,9 @@
     ],
     "transform": {
       ".*": "<rootDir>/node_modules/babel-jest"
+    },
+    "moduleNameMapper": {
+      "\\.css$": "<rootDir>/test/__mocks__/styleMock.js"
     }
   }
 }
