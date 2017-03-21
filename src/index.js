@@ -14,13 +14,11 @@ Object.assign(Logalize, {
   configure ({
     enabled = true,
     enableFormatting = true,
-    enableConsoleHooks = true,
     collapseNamespaces = false
   } = {}) {
     Object.assign(this, {
       enabled,
       enableFormatting,
-      enableConsoleHooks,
       collapseNamespaces,
       formattableMethods: ['log', 'info', 'debug', 'warn', 'error', 'focus']
     })
@@ -29,12 +27,6 @@ Object.assign(Logalize, {
       this.appendStylesToDOM()
     } else {
       this.removeStylesFromDOM()
-    }
-
-    if (this.enableConsoleHooks) {
-      this.setupConsoleHooks()
-    } else {
-      this.removeConsoleHooks()
     }
 
     NamespaceManager.configure({
@@ -167,51 +159,6 @@ Object.assign(Logalize, {
     } else {
       return this.enabled
     }
-  },
-
-  setupConsoleHooks () {
-    const self = this
-    console.log            = function () { self.performConsoleAction('log', arguments) }
-    console.debug          = function () { self.performConsoleAction('debug', arguments) }
-    console.info           = function () { self.performConsoleAction('info', arguments) }
-    console.warn           = function () { self.performConsoleAction('warn', arguments) }
-    console.error          = function () { self.performConsoleAction('error', arguments) }
-    console.assert         = function () { self.performConsoleAction('assert', arguments) }
-    console.count          = function () { self.performConsoleAction('count', arguments) }
-    console.dir            = function () { self.performConsoleAction('dir', arguments) }
-    console.dirxml         = function () { self.performConsoleAction('dirxml', arguments) }
-    console.group          = function () { self.performConsoleAction('group', arguments) }
-    console.groupCollapsed = function () { self.performConsoleAction('groupCollapsed', arguments) }
-    console.groupEnd       = function () { self.performConsoleAction('groupEnd', arguments) }
-    console.profile        = function () { self.performConsoleAction('profile', arguments) }
-    console.profileEnd     = function () { self.performConsoleAction('profileEnd', arguments) }
-    console.time           = function () { self.performConsoleAction('time', arguments) }
-    console.timeEnd        = function () { self.performConsoleAction('timeEnd', arguments) }
-    console.timeStamp      = function () { self.performConsoleAction('timeStamp', arguments) }
-    console.trace          = function () { self.performConsoleAction('trace', arguments) }
-    console.clear          = function () { self.performConsoleAction('clear', arguments) }
-  },
-
-  removeConsoleHooks () {
-    console.log            = BrowserAdapter.log
-    console.debug          = BrowserAdapter.debug
-    console.info           = BrowserAdapter.info
-    console.warn           = BrowserAdapter.warn
-    console.error          = BrowserAdapter.error
-    console.assert         = BrowserAdapter.assert
-    console.count          = BrowserAdapter.count
-    console.dir            = BrowserAdapter.dir
-    console.dirxml         = BrowserAdapter.dirxml
-    console.group          = BrowserAdapter.group
-    console.groupCollapsed = BrowserAdapter.groupCollapsed
-    console.groupEnd       = BrowserAdapter.groupEnd
-    console.profile        = BrowserAdapter.profile
-    console.profileEnd     = BrowserAdapter.profileEnd
-    console.time           = BrowserAdapter.time
-    console.timeEnd        = BrowserAdapter.timeEnd
-    console.timeStamp      = BrowserAdapter.timeStamp
-    console.trace          = BrowserAdapter.trace
-    console.clear          = BrowserAdapter.clear
   },
 
   performConsoleAction (action, args) {

@@ -71,7 +71,6 @@ it('supports clojure syntax', function () {
     logalize.log('log #1')
     logalize.namespace(2).log('log #1.5')
     logalize.log('log #2')
-    console.log('im out')
     logalize.namespace(20, 42, function () {
       logalize.log('log #2.5')
     })
@@ -90,10 +89,6 @@ it('supports clojure syntax', function () {
     {
       args: ['log #2'],
       groupStack: [[1]]
-    },
-    {
-      args: ['im out'],
-      groupStack: []
     },
     {
       args: ['log #2.5'],
