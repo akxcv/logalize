@@ -1,6 +1,6 @@
 {
   "name": "logalize",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A better window.console",
   "keywords": [
     "browser",
@@ -11,10 +11,11 @@
     "developer",
     "wrapper"
   ],
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "node-sass index.scss src/index.css && webpack",
+    "build:lib": "node-sass index.scss lib/index.css && babel src --out-dir lib",
     "lint": "eslint src/*.js test/*.js",
     "lint-staged": "lint-staged",
     "spellcheck": "yaspeller-ci *.md",
