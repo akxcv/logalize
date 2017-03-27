@@ -1,7 +1,7 @@
 import BrowserAdapter from './browserAdapter'
 import Formatter from './formatter'
 import NamespaceManager from './namespaceManager'
-import stylesheet from './index.css'
+import stylesheet from './stylesheet.js'
 
 function Logalize (...args) {
   Logalize.print('log', ...args)
@@ -170,7 +170,7 @@ Object.assign(Logalize, {
     if (document.getElementById('logalize-stylesheet')) return
     var styleEl = document.createElement('style')
     styleEl.id = 'logalize-stylesheet'
-    styleEl.innerHTML = stylesheet.toString()
+    styleEl.innerHTML = stylesheet
     document.head.insertBefore(styleEl, document.head.firstChild)
   },
 

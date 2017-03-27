@@ -1,4 +1,4 @@
-#logalize {
+export default `#logalize {
   color: black;
   background-color: transparent;
   border-radius: 0;
@@ -54,3 +54,4 @@
     text-decoration: line-through; }
   #logalize.underline {
     text-decoration: underline; }
+`

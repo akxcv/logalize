@@ -12,11 +12,6 @@ export default {
         test: /\.js$/,
         loaders: ['babel-loader'],
         exclude: /node_modules/
-      },
-      {
-        test: /\.css$/,
-        loaders: ['css-loader'],
-        exclude: /node_modules/
       }
     ]
   }

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -204,9 +204,9 @@ var _namespaceManager = __webpack_require__(3);
 
 var _namespaceManager2 = _interopRequireDefault(_namespaceManager);
 
-var _index = __webpack_require__(5);
+var _stylesheet = __webpack_require__(4);
 
-var _index2 = _interopRequireDefault(_index);
+var _stylesheet2 = _interopRequireDefault(_stylesheet);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -404,7 +404,7 @@ Object.assign(Logalize, {
     if (document.getElementById('logalize-stylesheet')) return;
     var styleEl = document.createElement('style');
     styleEl.id = 'logalize-stylesheet';
-    styleEl.innerHTML = _index2.default.toString();
+    styleEl.innerHTML = _stylesheet2.default;
     document.head.insertBefore(styleEl, document.head.firstChild);
   },
   removeStylesFromDOM: function removeStylesFromDOM() {
@@ -662,7 +662,7 @@ var _browserAdapter = __webpack_require__(0);
 
 var _browserAdapter2 = _interopRequireDefault(_browserAdapter);
 
-var _utils = __webpack_require__(4);
+var _utils = __webpack_require__(5);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -797,6 +797,18 @@ exports.default = NamespaceManager;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = "#logalize {\n  color: black;\n  background-color: transparent;\n  border-radius: 0;\n  padding: 0;\n  margin: 0;\n  font-weight: normal;\n  font-style: normal;\n  display: none; }\n  #logalize.badge {\n    color: white;\n    background-color: black;\n    border-radius: 3px;\n    padding: 2px;\n    margin: 0 2px; }\n    #logalize.badge.blue {\n      color: white;\n      background-color: #61afef; }\n    #logalize.badge.orange {\n      color: white;\n      background-color: #d19a66; }\n    #logalize.badge.red {\n      color: white;\n      background-color: #e06c75; }\n    #logalize.badge.green {\n      color: white;\n      background-color: #98c379; }\n    #logalize.badge.cyan {\n      color: white;\n      background-color: #56b6c2; }\n    #logalize.badge.purple {\n      color: white;\n      background-color: #c678dd; }\n    #logalize.badge.focus {\n      color: #bada55;\n      background: #444; }\n  #logalize.blue {\n    color: #4078f2; }\n  #logalize.orange {\n    color: #986801; }\n  #logalize.red {\n    color: #e45649; }\n  #logalize.green {\n    color: #50a14f; }\n  #logalize.cyan {\n    color: #0184bc; }\n  #logalize.purple {\n    color: #a626a4; }\n  #logalize.bold {\n    font-weight: bold; }\n  #logalize.italic {\n    font-style: italic; }\n  #logalize.strikethrough {\n    text-decoration: line-through; }\n  #logalize.underline {\n    text-decoration: underline; }\n";
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -844,77 +856,7 @@ function compareArrays(array1, array2) {
 }
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(6)();
-// imports
-
-
-// module
-exports.push([module.i, "#logalize {\n  color: black;\n  background-color: transparent;\n  border-radius: 0;\n  padding: 0;\n  margin: 0;\n  font-weight: normal;\n  font-style: normal;\n  display: none; }\n  #logalize.badge {\n    color: white;\n    background-color: black;\n    border-radius: 3px;\n    padding: 2px;\n    margin: 0 2px; }\n    #logalize.badge.blue {\n      color: white;\n      background-color: #61afef; }\n    #logalize.badge.orange {\n      color: white;\n      background-color: #d19a66; }\n    #logalize.badge.red {\n      color: white;\n      background-color: #e06c75; }\n    #logalize.badge.green {\n      color: white;\n      background-color: #98c379; }\n    #logalize.badge.cyan {\n      color: white;\n      background-color: #56b6c2; }\n    #logalize.badge.purple {\n      color: white;\n      background-color: #c678dd; }\n    #logalize.badge.focus {\n      color: #bada55;\n      background: #444; }\n  #logalize.blue {\n    color: #4078f2; }\n  #logalize.orange {\n    color: #986801; }\n  #logalize.red {\n    color: #e45649; }\n  #logalize.green {\n    color: #50a14f; }\n  #logalize.cyan {\n    color: #0184bc; }\n  #logalize.purple {\n    color: #a626a4; }\n  #logalize.bold {\n    font-weight: bold; }\n  #logalize.italic {\n    font-style: italic; }\n  #logalize.strikethrough {\n    text-decoration: line-through; }\n  #logalize.underline {\n    text-decoration: underline; }\n", ""]);
-
-// exports
-
-
-/***/ }),
 /* 6 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function() {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		var result = [];
-		for(var i = 0; i < this.length; i++) {
-			var item = this[i];
-			if(item[2]) {
-				result.push("@media " + item[2] + "{" + item[1] + "}");
-			} else {
-				result.push(item[1]);
-			}
-		}
-		return result.join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-
-/***/ }),
-/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
